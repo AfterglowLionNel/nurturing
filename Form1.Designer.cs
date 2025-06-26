@@ -37,8 +37,8 @@
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.label_Chara1 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
+            this.label_Chara2 = new System.Windows.Forms.Label();
+            this.label_Chara3 = new System.Windows.Forms.Label();
             this.button_changeName = new System.Windows.Forms.Button();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
@@ -70,7 +70,7 @@
             // button_submitPick
             // 
             this.button_submitPick.Font = new System.Drawing.Font("MS UI Gothic", 16.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.button_submitPick.Location = new System.Drawing.Point(398, 551);
+            this.button_submitPick.Location = new System.Drawing.Point(411, 578);
             this.button_submitPick.Margin = new System.Windows.Forms.Padding(2);
             this.button_submitPick.Name = "button_submitPick";
             this.button_submitPick.Size = new System.Drawing.Size(110, 42);
@@ -86,10 +86,10 @@
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 26.53061F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 10.20408F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 26.53061F));
-            this.tableLayoutPanel1.Controls.Add(this.pictureBox2, 2, 0);
             this.tableLayoutPanel1.Controls.Add(this.pictureBox3, 4, 0);
             this.tableLayoutPanel1.Controls.Add(this.pictureBox1, 0, 0);
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(34, 263);
+            this.tableLayoutPanel1.Controls.Add(this.pictureBox2, 2, 0);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(47, 290);
             this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(2);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
@@ -138,37 +138,37 @@
             // label_Chara1
             // 
             this.label_Chara1.Font = new System.Drawing.Font("MS UI Gothic", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.label_Chara1.Location = new System.Drawing.Point(32, 238);
+            this.label_Chara1.Location = new System.Drawing.Point(45, 259);
             this.label_Chara1.Name = "label_Chara1";
-            this.label_Chara1.Size = new System.Drawing.Size(192, 23);
+            this.label_Chara1.Size = new System.Drawing.Size(192, 29);
             this.label_Chara1.TabIndex = 12;
             this.label_Chara1.Text = "赤ピクミン";
             this.label_Chara1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // label4
+            // label_Chara2
             // 
-            this.label4.Font = new System.Drawing.Font("MS UI Gothic", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.label4.Location = new System.Drawing.Point(297, 238);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(192, 23);
-            this.label4.TabIndex = 13;
-            this.label4.Text = "羽ピクミン";
-            this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.label_Chara2.Font = new System.Drawing.Font("MS UI Gothic", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.label_Chara2.Location = new System.Drawing.Point(310, 253);
+            this.label_Chara2.Name = "label_Chara2";
+            this.label_Chara2.Size = new System.Drawing.Size(192, 35);
+            this.label_Chara2.TabIndex = 13;
+            this.label_Chara2.Text = "羽ピクミン";
+            this.label_Chara2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // label5
+            // label_Chara3
             // 
-            this.label5.Font = new System.Drawing.Font("MS UI Gothic", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.label5.Location = new System.Drawing.Point(562, 238);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(194, 23);
-            this.label5.TabIndex = 14;
-            this.label5.Text = "岩ピクミン";
-            this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.label_Chara3.Font = new System.Drawing.Font("MS UI Gothic", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.label_Chara3.Location = new System.Drawing.Point(575, 253);
+            this.label_Chara3.Name = "label_Chara3";
+            this.label_Chara3.Size = new System.Drawing.Size(194, 35);
+            this.label_Chara3.TabIndex = 14;
+            this.label_Chara3.Text = "岩ピクミン";
+            this.label_Chara3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // button_changeName
             // 
             this.button_changeName.Font = new System.Drawing.Font("MS UI Gothic", 16.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.button_changeName.Location = new System.Drawing.Point(274, 551);
+            this.button_changeName.Location = new System.Drawing.Point(287, 578);
             this.button_changeName.Margin = new System.Windows.Forms.Padding(2);
             this.button_changeName.Name = "button_changeName";
             this.button_changeName.Size = new System.Drawing.Size(110, 42);
@@ -180,10 +180,10 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(796, 610);
+            this.ClientSize = new System.Drawing.Size(794, 631);
             this.Controls.Add(this.button_changeName);
-            this.Controls.Add(this.label5);
-            this.Controls.Add(this.label4);
+            this.Controls.Add(this.label_Chara3);
+            this.Controls.Add(this.label_Chara2);
             this.Controls.Add(this.label_Chara1);
             this.Controls.Add(this.button_submitPick);
             this.Controls.Add(this.tableLayoutPanel1);
@@ -210,8 +210,8 @@
         private System.Windows.Forms.PictureBox pictureBox2;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.Label label_Chara1;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label_Chara2;
+        private System.Windows.Forms.Label label_Chara3;
         private System.Windows.Forms.Button button_changeName;
     }
 }
