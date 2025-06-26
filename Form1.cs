@@ -30,21 +30,30 @@ namespace nurturing
         private Timer animationTimer;
         private int animationStep = 0;
         private bool isAnimating = false;
-        private TextBox textBox1;  // 名前入力用テキストボックス
+        private Label label_CharaName;  // キャラクター名表示用ラベル
+        private string customName = "";  // カスタム名（ユーザーが変更した名前）
 
         public Form_Pick()
         {
             InitializeComponent();
             this.AutoScaleMode = AutoScaleMode.None;
 
-            // 名前変更ボタンを作成
-            button_changeName = new Button();
-            button_changeName.Text = "名前変更";
-            button_changeName.Location = new Point(220, 117);
-            button_changeName.Size = new Size(80, 32);
-            button_changeName.Font = new Font("MS UI Gothic", 10);
-            button_changeName.Click += Button_changeName_Click;
-            this.Controls.Add(button_changeName);
+            // 名前表示用ラベルを作成
+            label_CharaName = new Label();
+            label_CharaName.Font = new Font("MS UI Gothic", 18, FontStyle.Bold);
+            label_CharaName.Location = new Point(34, 117);
+            label_CharaName.Size = new Size(200, 32);
+            label_CharaName.Text = "";
+            label_CharaName.TextAlign = ContentAlignment.MiddleLeft;
+            this.Controls.Add(label_CharaName);
+
+            // 名前のラベルを追加
+            Label label_Name = new Label();
+            label_Name.Text = "名前";
+            label_Name.Font = new Font("MS UI Gothic", 18);
+            label_Name.Location = new Point(38, 90);
+            label_Name.Size = new Size(58, 24);
+            this.Controls.Add(label_Name);
 
             InitializeCharacters();
             UpdateDisplay();
@@ -56,6 +65,9 @@ namespace nurturing
 
             // 選択ボタンのイベントハンドラを追加
             button_submitPick.Click += Button_submitPick_Click;
+
+            // 名前変更ボタンのイベントハンドラを追加
+            button_changeName.Click += Button_changeName_Click;
         }
 
         private void InitializeCharacters()
@@ -131,8 +143,8 @@ namespace nurturing
             pictureBox3.SizeMode = PictureBoxSizeMode.StretchImage;
 
             // ラベルの更新
-            label3.Text = characters[leftIndex].Name;
-            label3.ForeColor = Color.Gray;
+            label_Chara1.Text = characters[leftIndex].Name;
+            label_Chara1.ForeColor = Color.Gray;
             label4.Text = characters[centerIndex].Name;
             label4.ForeColor = Color.Black;
             label4.Font = new Font(label4.Font, FontStyle.Bold);
@@ -145,6 +157,16 @@ namespace nurturing
                          $"体力：{selected.Health}\n" +
                          $"攻撃力：{selected.Attack}\n" +
                          $"防御力：{selected.Defense}";
+
+            // 名前表示を更新（カスタム名があればそれを、なければキャラクター名を表示）
+            if (!string.IsNullOrEmpty(customName))
+            {
+                label_CharaName.Text = customName;
+            }
+            else
+            {
+                label_CharaName.Text = selected.Name;
+            }
         }
 
         // 画像を半透明にする
@@ -185,6 +207,10 @@ namespace nurturing
             if (isAnimating) return;
 
             currentIndex = (currentIndex + direction + characters.Count) % characters.Count;
+
+            // キャラクターを切り替えたらカスタム名をクリア
+            customName = "";
+
             StartAnimation();
         }
 
@@ -239,18 +265,15 @@ namespace nurturing
         // 選択ボタンのクリックイベント
         private void Button_submitPick_Click(object sender, EventArgs e)
         {
-            // 名前が未入力の場合
-            if (string.IsNullOrWhiteSpace(textBox1.Text))
-            {
-                MessageBox.Show("名前を入力してください。", "入力エラー",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
+            // 名前を取得（カスタム名があればそれを、なければキャラクター名を使用）
+            string finalName = !string.IsNullOrEmpty(customName)
+                ? customName
+                : characters[currentIndex].Name;
 
             // 選択確定のメッセージを表示
             var selected = characters[currentIndex];
             string message = $"以下の内容で確定しますか？\n\n" +
-                           $"名前：{textBox1.Text}\n" +
+                           $"名前：{finalName}\n" +
                            $"種類：{selected.Name}\n" +
                            $"体力：{selected.Health}\n" +
                            $"攻撃力：{selected.Attack}\n" +
@@ -266,6 +289,27 @@ namespace nurturing
 
                 // ここで次の画面に遷移する処理を追加できます
                 // 例: this.Hide(); new Form_Main().Show();
+            }
+        }
+
+        // 名前変更ボタンのクリックイベント
+        private void Button_changeName_Click(object sender, EventArgs e)
+        {
+            // FormNameChangeを作成して表示
+            FormNameChange nameChangeForm = new FormNameChange();
+
+            // 現在の名前を渡す（カスタム名があればそれを、なければキャラクター名を使用）
+            nameChangeForm.CurrentName = !string.IsNullOrEmpty(customName)
+                ? customName
+                : characters[currentIndex].Name;
+
+            // ダイアログとして表示
+            if (nameChangeForm.ShowDialog(this) == DialogResult.OK)
+            {
+                // OKが押された場合、新しい名前を取得
+                customName = nameChangeForm.NewName;
+                // 表示を更新
+                UpdateDisplay();
             }
         }
     }
