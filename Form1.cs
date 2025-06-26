@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace nurturing
 {
@@ -31,10 +32,23 @@ namespace nurturing
         private int animationStep = 0;
         private bool isAnimating = false;
 
+        // フィールドに名前変更ボタンを追加
+        private Button button_changeName;
+
         public Form_Pick()
         {
             InitializeComponent();
             this.AutoScaleMode = AutoScaleMode.None;
+
+            // 名前変更ボタンを作成
+            button_changeName = new Button();
+            button_changeName.Text = "名前変更";
+            button_changeName.Location = new Point(220, 117);
+            button_changeName.Size = new Size(80, 32);
+            button_changeName.Font = new Font("MS UI Gothic", 10);
+            button_changeName.Click += Button_changeName_Click;
+            this.Controls.Add(button_changeName);
+
             InitializeCharacters();
             UpdateDisplay();
 

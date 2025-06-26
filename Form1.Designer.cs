@@ -30,10 +30,7 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form_Pick));
             this.label_Title = new System.Windows.Forms.Label();
-            this.label_Name = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
             this.button_submitPick = new System.Windows.Forms.Button();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.label3 = new System.Windows.Forms.Label();
@@ -42,6 +39,7 @@
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.button_changeName = new System.Windows.Forms.Button();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
@@ -59,27 +57,6 @@
             this.label_Title.Text = "キャラクターを選択してください";
             this.label_Title.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // label_Name
-            // 
-            this.label_Name.AutoSize = true;
-            this.label_Name.Font = new System.Drawing.Font("MS UI Gothic", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.label_Name.Location = new System.Drawing.Point(38, 90);
-            this.label_Name.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label_Name.Name = "label_Name";
-            this.label_Name.Size = new System.Drawing.Size(58, 24);
-            this.label_Name.TabIndex = 1;
-            this.label_Name.Text = "名前";
-            // 
-            // textBox1
-            // 
-            this.textBox1.Font = new System.Drawing.Font("MS UI Gothic", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.textBox1.Location = new System.Drawing.Point(34, 117);
-            this.textBox1.Margin = new System.Windows.Forms.Padding(2);
-            this.textBox1.Multiline = true;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(168, 32);
-            this.textBox1.TabIndex = 2;
-            // 
             // label2
             // 
             this.label2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
@@ -90,21 +67,10 @@
             this.label2.Size = new System.Drawing.Size(348, 156);
             this.label2.TabIndex = 4;
             // 
-            // button1
-            // 
-            this.button1.Font = new System.Drawing.Font("MS UI Gothic", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.button1.Location = new System.Drawing.Point(146, 153);
-            this.button1.Margin = new System.Windows.Forms.Padding(2);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(56, 32);
-            this.button1.TabIndex = 10;
-            this.button1.Text = "確定";
-            this.button1.UseVisualStyleBackColor = true;
-            // 
             // button_submitPick
             // 
             this.button_submitPick.Font = new System.Drawing.Font("MS UI Gothic", 16.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.button_submitPick.Location = new System.Drawing.Point(345, 552);
+            this.button_submitPick.Location = new System.Drawing.Point(398, 551);
             this.button_submitPick.Margin = new System.Windows.Forms.Padding(2);
             this.button_submitPick.Name = "button_submitPick";
             this.button_submitPick.Size = new System.Drawing.Size(110, 42);
@@ -199,20 +165,29 @@
             this.pictureBox1.TabStop = false;
             this.pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click);
             // 
+            // button_changeName
+            // 
+            this.button_changeName.Font = new System.Drawing.Font("MS UI Gothic", 16.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.button_changeName.Location = new System.Drawing.Point(274, 551);
+            this.button_changeName.Margin = new System.Windows.Forms.Padding(2);
+            this.button_changeName.Name = "button_changeName";
+            this.button_changeName.Size = new System.Drawing.Size(110, 42);
+            this.button_changeName.TabIndex = 15;
+            this.button_changeName.Text = "名前変更";
+            this.button_changeName.UseVisualStyleBackColor = true;
+            // 
             // Form_Pick
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(796, 610);
+            this.Controls.Add(this.button_changeName);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.button_submitPick);
-            this.Controls.Add(this.button1);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.textBox1);
-            this.Controls.Add(this.label_Name);
             this.Controls.Add(this.label_Title);
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "Form_Pick";
@@ -222,17 +197,13 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
 
         private System.Windows.Forms.Label label_Title;
-        private System.Windows.Forms.Label label_Name;
-        private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button_submitPick;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.PictureBox pictureBox3;
@@ -241,6 +212,7 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Button button_changeName;
     }
 }
 
