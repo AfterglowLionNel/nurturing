@@ -8,7 +8,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace nurturing
 {
@@ -31,9 +30,7 @@ namespace nurturing
         private Timer animationTimer;
         private int animationStep = 0;
         private bool isAnimating = false;
-
-        // フィールドに名前変更ボタンを追加
-        private Button button_changeName;
+        private TextBox textBox1;  // 名前入力用テキストボックス
 
         public Form_Pick()
         {
