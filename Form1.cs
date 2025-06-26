@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,8 +18,10 @@ namespace nurturing
         {
             public string Name { get; set; }
             public Image Image { get; set; }
-            public string Status { get; set; }
-            public RadioButton RadioButton { get; set; }
+            public string Description { get; set; }
+            public int Health { get; set; }
+            public int Attack { get; set; }
+            public int Defense { get; set; }
         }
 
         // キャラクターリスト
@@ -39,6 +42,9 @@ namespace nurturing
             animationTimer = new Timer();
             animationTimer.Interval = 10; // 10ms間隔
             animationTimer.Tick += AnimationTimer_Tick;
+
+            // 選択ボタンのイベントハンドラを追加
+            button_submitPick.Click += Button_submitPick_Click;
         }
 
         private void InitializeCharacters()
@@ -49,19 +55,28 @@ namespace nurturing
                 {
                     Name = "赤ピクミン",
                     Image = Properties.Resources.RedPikumin,
-                    Status = "火に強い\n攻撃力：★★★\n速度：★★☆",
+                    Description = "火に強く、攻撃力が高い",
+                    Health = 100,
+                    Attack = 80,
+                    Defense = 60
                 },
                 new CharacterInfo
                 {
                     Name = "羽ピクミン",
                     Image = Properties.Resources.WingPikumin,
-                    Status = "空を飛べる\n攻撃力：★☆☆\n速度：★★★",
+                    Description = "空を飛べて素早い",
+                    Health = 80,
+                    Attack = 50,
+                    Defense = 40
                 },
                 new CharacterInfo
                 {
                     Name = "岩ピクミン",
                     Image = Properties.Resources.RockPikumin,
-                    Status = "防御力が高い\n攻撃力：★★★\n速度：★☆☆",
+                    Description = "防御力が高く頑丈",
+                    Health = 120,
+                    Attack = 70,
+                    Defense = 100
                 }
             };
 
@@ -92,28 +107,49 @@ namespace nurturing
             int leftIndex = (currentIndex - 1 + characters.Count) % characters.Count;
             int rightIndex = (currentIndex + 1) % characters.Count;
 
-            // 左側
-            pictureBox1.Image = characters[leftIndex].Image;
+            // 左側（薄く表示）
+            pictureBox1.Image = MakeTransparentImage(characters[leftIndex].Image, 0.3f);
             pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
 
             // 中央（選択中）
             pictureBox2.Image = characters[centerIndex].Image;
             pictureBox2.SizeMode = PictureBoxSizeMode.StretchImage;
 
-            // 右側
-            pictureBox3.Image = characters[rightIndex].Image;
+            // 右側（薄く表示）
+            pictureBox3.Image = MakeTransparentImage(characters[rightIndex].Image, 0.3f);
             pictureBox3.SizeMode = PictureBoxSizeMode.StretchImage;
 
-            // 中央のPictureBoxを少し大きくする（視覚的効果）
-            pictureBox2.Size = new Size(270, 369);
-            pictureBox1.Size = new Size(250, 349);
-            pictureBox3.Size = new Size(250, 349);
-
-            // ラジオボタンの選択を更新
-            characters[centerIndex].RadioButton.Checked = true;
+            // ラベルの更新
+            label3.Text = characters[leftIndex].Name;
+            label3.ForeColor = Color.Gray;
+            label4.Text = characters[centerIndex].Name;
+            label4.ForeColor = Color.Black;
+            label4.Font = new Font(label4.Font, FontStyle.Bold);
+            label5.Text = characters[rightIndex].Name;
+            label5.ForeColor = Color.Gray;
 
             // ステータス表示を更新
-            label2.Text = characters[centerIndex].Status;
+            var selected = characters[centerIndex];
+            label2.Text = $"{selected.Description}\n\n" +
+                         $"体力：{selected.Health}\n" +
+                         $"攻撃力：{selected.Attack}\n" +
+                         $"防御力：{selected.Defense}";
+        }
+
+        // 画像を半透明にする
+        private Image MakeTransparentImage(Image source, float opacity)
+        {
+            Bitmap bmp = new Bitmap(source.Width, source.Height);
+            using (Graphics g = Graphics.FromImage(bmp))
+            {
+                ColorMatrix colorMatrix = new ColorMatrix();
+                colorMatrix.Matrix33 = opacity;
+                ImageAttributes attributes = new ImageAttributes();
+                attributes.SetColorMatrix(colorMatrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
+                g.DrawImage(source, new Rectangle(0, 0, bmp.Width, bmp.Height),
+                    0, 0, source.Width, source.Height, GraphicsUnit.Pixel, attributes);
+            }
+            return bmp;
         }
 
         private void pictureBox1_Click(object sender, EventArgs e)
@@ -187,6 +223,39 @@ namespace nurturing
                 MoveCarousel(-1);
             else if (e.Delta < 0)
                 MoveCarousel(1);
+        }
+
+        // 選択ボタンのクリックイベント
+        private void Button_submitPick_Click(object sender, EventArgs e)
+        {
+            // 名前が未入力の場合
+            if (string.IsNullOrWhiteSpace(textBox1.Text))
+            {
+                MessageBox.Show("名前を入力してください。", "入力エラー",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            // 選択確定のメッセージを表示
+            var selected = characters[currentIndex];
+            string message = $"以下の内容で確定しますか？\n\n" +
+                           $"名前：{textBox1.Text}\n" +
+                           $"種類：{selected.Name}\n" +
+                           $"体力：{selected.Health}\n" +
+                           $"攻撃力：{selected.Attack}\n" +
+                           $"防御力：{selected.Defense}";
+
+            DialogResult result = MessageBox.Show(message, "確認",
+                MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+            if (result == DialogResult.Yes)
+            {
+                MessageBox.Show("育成対象を確定しました！", "確定",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                // ここで次の画面に遷移する処理を追加できます
+                // 例: this.Hide(); new Form_Main().Show();
+            }
         }
     }
 }
