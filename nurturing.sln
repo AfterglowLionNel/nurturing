@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35931.197 d17.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "nurturing", "nurturing.csproj", "{522A1E69-8DB4-430D-949D-7B2696DDB70B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{522A1E69-8DB4-430D-949D-7B2696DDB70B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{522A1E69-8DB4-430D-949D-7B2696DDB70B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{522A1E69-8DB4-430D-949D-7B2696DDB70B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{522A1E69-8DB4-430D-949D-7B2696DDB70B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {77553A75-ABD2-458B-B6C6-CE15E798E08D}
+	EndGlobalSection
+EndGlobal
