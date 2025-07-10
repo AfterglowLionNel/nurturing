@@ -270,10 +270,10 @@ namespace nurturing
             // キャラクター名ラベルのスタイル
             label_Chara1.Font = labelFont;
             label_Chara1.BackColor = Color.Transparent;
-            label4.Font = labelFont;
-            label4.BackColor = Color.Transparent;
-            label5.Font = labelFont;
-            label5.BackColor = Color.Transparent;
+            label_Chara2.Font = labelFont;
+            label_Chara2.BackColor = Color.Transparent;
+            label_Chara3.Font = labelFont;
+            label_Chara3.BackColor = Color.Transparent;
         }
 
         private void StyleButton(Button button, Color color)
@@ -430,16 +430,16 @@ namespace nurturing
                 : characters[leftIndex].Name;
             label_Chara1.ForeColor = Color.FromArgb(169, 169, 169);  // Dark Gray（薄すぎない色）
 
-            label4.Text = !string.IsNullOrEmpty(customNames[centerIndex])
+            label_Chara2.Text = !string.IsNullOrEmpty(customNames[centerIndex])
                 ? customNames[centerIndex]
                 : characters[centerIndex].Name;
-            label4.ForeColor = characters[centerIndex].ThemeColor;
-            label4.Font = new Font(labelFont.FontFamily, 16, FontStyle.Bold);
+            label_Chara2.ForeColor = characters[centerIndex].ThemeColor;
+            label_Chara2.Font = new Font(labelFont.FontFamily, 16, FontStyle.Bold);
 
-            label5.Text = !string.IsNullOrEmpty(customNames[rightIndex])
+            label_Chara3.Text = !string.IsNullOrEmpty(customNames[rightIndex])
                 ? customNames[rightIndex]
                 : characters[rightIndex].Name;
-            label5.ForeColor = Color.FromArgb(169, 169, 169);  // Dark Gray（薄すぎない色）
+            label_Chara3.ForeColor = Color.FromArgb(169, 169, 169);  // Dark Gray（薄すぎない色）
 
             // ステータス表示を更新
             var selected = characters[centerIndex];
