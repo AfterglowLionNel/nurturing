@@ -583,8 +583,20 @@ namespace nurturing
 
             if (result == DialogResult.Yes)
             {
-                MessageBox.Show("育成対象を確定しました！", "確定",
-                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                // 育成画面へ遷移
+                FormNurture nurtureForm = new FormNurture(
+                    finalName,
+                    selected.Name,
+                    selected.Health,
+                    selected.Attack,
+                    selected.Defense,
+                    selected.Image
+                );
+
+                // モーダルで表示
+                this.Hide();
+                nurtureForm.ShowDialog();
+                this.Show();
             }
         }
 

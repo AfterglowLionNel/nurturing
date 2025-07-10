@@ -29,26 +29,26 @@
         private void InitializeComponent()
         {
             this.panel_gameArea = new System.Windows.Forms.Panel();
-            this.panel_stats = new System.Windows.Forms.Panel();
-            this.label_characterName = new System.Windows.Forms.Label();
-            this.label_level = new System.Windows.Forms.Label();
+            this.progressBar_defense = new System.Windows.Forms.ProgressBar();
+            this.progressBar_attack = new System.Windows.Forms.ProgressBar();
+            this.progressBar_hp = new System.Windows.Forms.ProgressBar();
             this.pictureBox_extract = new System.Windows.Forms.PictureBox();
             this.pictureBox_character = new System.Windows.Forms.PictureBox();
-            this.label_exp = new System.Windows.Forms.Label();
-            this.progressBar_exp = new System.Windows.Forms.Label();
-            this.label_hp = new System.Windows.Forms.Label();
-            this.label_attack = new System.Windows.Forms.Label();
-            this.label_defense = new System.Windows.Forms.Label();
-            this.label_extractCount = new System.Windows.Forms.Label();
-            this.button_save = new System.Windows.Forms.Button();
+            this.panel_stats = new System.Windows.Forms.Panel();
+            this.progressBar_exp2 = new System.Windows.Forms.ProgressBar();
             this.button_back = new System.Windows.Forms.Button();
-            this.progressBar_hp = new System.Windows.Forms.ProgressBar();
-            this.progressBar_attack = new System.Windows.Forms.ProgressBar();
-            this.progressBar_defense = new System.Windows.Forms.ProgressBar();
+            this.button_save = new System.Windows.Forms.Button();
+            this.label_extractCount = new System.Windows.Forms.Label();
+            this.label_defense = new System.Windows.Forms.Label();
+            this.label_attack = new System.Windows.Forms.Label();
+            this.label_hp = new System.Windows.Forms.Label();
+            this.progressBar_exp = new System.Windows.Forms.Label();
+            this.label_level = new System.Windows.Forms.Label();
+            this.label_characterName = new System.Windows.Forms.Label();
             this.panel_gameArea.SuspendLayout();
-            this.panel_stats.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_extract)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_character)).BeginInit();
+            this.panel_stats.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel_gameArea
@@ -64,42 +64,26 @@
             this.panel_gameArea.Size = new System.Drawing.Size(600, 500);
             this.panel_gameArea.TabIndex = 0;
             // 
-            // panel_stats
+            // progressBar_defense
             // 
-            this.panel_stats.BackColor = System.Drawing.Color.White;
-            this.panel_stats.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel_stats.Controls.Add(this.button_back);
-            this.panel_stats.Controls.Add(this.button_save);
-            this.panel_stats.Controls.Add(this.label_extractCount);
-            this.panel_stats.Controls.Add(this.label_defense);
-            this.panel_stats.Controls.Add(this.label_attack);
-            this.panel_stats.Controls.Add(this.label_hp);
-            this.panel_stats.Controls.Add(this.progressBar_exp);
-            this.panel_stats.Controls.Add(this.label_exp);
-            this.panel_stats.Controls.Add(this.label_level);
-            this.panel_stats.Controls.Add(this.label_characterName);
-            this.panel_stats.Location = new System.Drawing.Point(630, 12);
-            this.panel_stats.Name = "panel_stats";
-            this.panel_stats.Size = new System.Drawing.Size(250, 500);
-            this.panel_stats.TabIndex = 1;
+            this.progressBar_defense.Location = new System.Drawing.Point(15, 230);
+            this.progressBar_defense.Name = "progressBar_defense";
+            this.progressBar_defense.Size = new System.Drawing.Size(200, 20);
+            this.progressBar_defense.TabIndex = 4;
             // 
-            // label_characterName
+            // progressBar_attack
             // 
-            this.label_characterName.Font = new System.Drawing.Font("MS UI Gothic", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.label_characterName.Location = new System.Drawing.Point(15, 15);
-            this.label_characterName.Name = "label_characterName";
-            this.label_characterName.Size = new System.Drawing.Size(200, 300);
-            this.label_characterName.TabIndex = 0;
-            this.label_characterName.Text = "キャラクター名";
+            this.progressBar_attack.Location = new System.Drawing.Point(15, 200);
+            this.progressBar_attack.Name = "progressBar_attack";
+            this.progressBar_attack.Size = new System.Drawing.Size(200, 20);
+            this.progressBar_attack.TabIndex = 3;
             // 
-            // label_level
+            // progressBar_hp
             // 
-            this.label_level.Font = new System.Drawing.Font("MS UI Gothic", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.label_level.Location = new System.Drawing.Point(15, 55);
-            this.label_level.Name = "label_level";
-            this.label_level.Size = new System.Drawing.Size(200, 25);
-            this.label_level.TabIndex = 1;
-            this.label_level.Text = "レベル：1";
+            this.progressBar_hp.Location = new System.Drawing.Point(15, 170);
+            this.progressBar_hp.Name = "progressBar_hp";
+            this.progressBar_hp.Size = new System.Drawing.Size(200, 20);
+            this.progressBar_hp.TabIndex = 2;
             // 
             // pictureBox_extract
             // 
@@ -121,70 +105,31 @@
             this.pictureBox_character.TabIndex = 0;
             this.pictureBox_character.TabStop = false;
             // 
-            // label_exp
+            // panel_stats
             // 
-            this.label_exp.AutoSize = true;
-            this.label_exp.Font = new System.Drawing.Font("MS UI Gothic", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.label_exp.Location = new System.Drawing.Point(15, 90);
-            this.label_exp.Name = "label_exp";
-            this.label_exp.Size = new System.Drawing.Size(165, 23);
-            this.label_exp.TabIndex = 2;
-            this.label_exp.Text = "経験値: 0 / 100";
+            this.panel_stats.BackColor = System.Drawing.Color.White;
+            this.panel_stats.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel_stats.Controls.Add(this.progressBar_exp2);
+            this.panel_stats.Controls.Add(this.button_back);
+            this.panel_stats.Controls.Add(this.button_save);
+            this.panel_stats.Controls.Add(this.label_extractCount);
+            this.panel_stats.Controls.Add(this.label_defense);
+            this.panel_stats.Controls.Add(this.label_attack);
+            this.panel_stats.Controls.Add(this.label_hp);
+            this.panel_stats.Controls.Add(this.progressBar_exp);
+            this.panel_stats.Controls.Add(this.label_level);
+            this.panel_stats.Controls.Add(this.label_characterName);
+            this.panel_stats.Location = new System.Drawing.Point(630, 12);
+            this.panel_stats.Name = "panel_stats";
+            this.panel_stats.Size = new System.Drawing.Size(250, 500);
+            this.panel_stats.TabIndex = 1;
             // 
-            // progressBar_exp
+            // progressBar_exp2
             // 
-            this.progressBar_exp.AutoSize = true;
-            this.progressBar_exp.Location = new System.Drawing.Point(15, 110);
-            this.progressBar_exp.Name = "progressBar_exp";
-            this.progressBar_exp.Size = new System.Drawing.Size(0, 15);
-            this.progressBar_exp.TabIndex = 3;
-            // 
-            // label_hp
-            // 
-            this.label_hp.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.label_hp.Location = new System.Drawing.Point(15, 150);
-            this.label_hp.Name = "label_hp";
-            this.label_hp.Size = new System.Drawing.Size(200, 20);
-            this.label_hp.TabIndex = 4;
-            this.label_hp.Text = "体力：100";
-            // 
-            // label_attack
-            // 
-            this.label_attack.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.label_attack.Location = new System.Drawing.Point(15, 180);
-            this.label_attack.Name = "label_attack";
-            this.label_attack.Size = new System.Drawing.Size(200, 20);
-            this.label_attack.TabIndex = 5;
-            this.label_attack.Text = "攻撃力：80";
-            // 
-            // label_defense
-            // 
-            this.label_defense.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.label_defense.Location = new System.Drawing.Point(15, 210);
-            this.label_defense.Name = "label_defense";
-            this.label_defense.Size = new System.Drawing.Size(200, 20);
-            this.label_defense.TabIndex = 6;
-            this.label_defense.Text = "防御力：60";
-            // 
-            // label_extractCount
-            // 
-            this.label_extractCount.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.label_extractCount.ForeColor = System.Drawing.Color.Black;
-            this.label_extractCount.Location = new System.Drawing.Point(15, 260);
-            this.label_extractCount.Name = "label_extractCount";
-            this.label_extractCount.Size = new System.Drawing.Size(200, 20);
-            this.label_extractCount.TabIndex = 7;
-            this.label_extractCount.Text = "エキス：999";
-            // 
-            // button_save
-            // 
-            this.button_save.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.button_save.Location = new System.Drawing.Point(15, 340);
-            this.button_save.Name = "button_save";
-            this.button_save.Size = new System.Drawing.Size(100, 40);
-            this.button_save.TabIndex = 8;
-            this.button_save.Text = "保存";
-            this.button_save.UseVisualStyleBackColor = true;
+            this.progressBar_exp2.Location = new System.Drawing.Point(15, 110);
+            this.progressBar_exp2.Name = "progressBar_exp2";
+            this.progressBar_exp2.Size = new System.Drawing.Size(200, 23);
+            this.progressBar_exp2.TabIndex = 10;
             // 
             // button_back
             // 
@@ -196,26 +141,78 @@
             this.button_back.Text = "戻る";
             this.button_back.UseVisualStyleBackColor = true;
             // 
-            // progressBar_hp
+            // button_save
             // 
-            this.progressBar_hp.Location = new System.Drawing.Point(15, 170);
-            this.progressBar_hp.Name = "progressBar_hp";
-            this.progressBar_hp.Size = new System.Drawing.Size(200, 20);
-            this.progressBar_hp.TabIndex = 2;
+            this.button_save.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.button_save.Location = new System.Drawing.Point(15, 340);
+            this.button_save.Name = "button_save";
+            this.button_save.Size = new System.Drawing.Size(100, 40);
+            this.button_save.TabIndex = 8;
+            this.button_save.Text = "保存";
+            this.button_save.UseVisualStyleBackColor = true;
             // 
-            // progressBar_attack
+            // label_extractCount
             // 
-            this.progressBar_attack.Location = new System.Drawing.Point(15, 200);
-            this.progressBar_attack.Name = "progressBar_attack";
-            this.progressBar_attack.Size = new System.Drawing.Size(200, 20);
-            this.progressBar_attack.TabIndex = 3;
+            this.label_extractCount.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.label_extractCount.ForeColor = System.Drawing.Color.Black;
+            this.label_extractCount.Location = new System.Drawing.Point(15, 260);
+            this.label_extractCount.Name = "label_extractCount";
+            this.label_extractCount.Size = new System.Drawing.Size(200, 20);
+            this.label_extractCount.TabIndex = 7;
+            this.label_extractCount.Text = "エキス：999";
             // 
-            // progressBar_defense
+            // label_defense
             // 
-            this.progressBar_defense.Location = new System.Drawing.Point(15, 230);
-            this.progressBar_defense.Name = "progressBar_defense";
-            this.progressBar_defense.Size = new System.Drawing.Size(200, 20);
-            this.progressBar_defense.TabIndex = 4;
+            this.label_defense.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.label_defense.Location = new System.Drawing.Point(15, 210);
+            this.label_defense.Name = "label_defense";
+            this.label_defense.Size = new System.Drawing.Size(200, 20);
+            this.label_defense.TabIndex = 6;
+            this.label_defense.Text = "防御力：60";
+            // 
+            // label_attack
+            // 
+            this.label_attack.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.label_attack.Location = new System.Drawing.Point(15, 180);
+            this.label_attack.Name = "label_attack";
+            this.label_attack.Size = new System.Drawing.Size(200, 20);
+            this.label_attack.TabIndex = 5;
+            this.label_attack.Text = "攻撃力：80";
+            // 
+            // label_hp
+            // 
+            this.label_hp.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.label_hp.Location = new System.Drawing.Point(15, 150);
+            this.label_hp.Name = "label_hp";
+            this.label_hp.Size = new System.Drawing.Size(200, 20);
+            this.label_hp.TabIndex = 4;
+            this.label_hp.Text = "体力：100";
+            // 
+            // progressBar_exp
+            // 
+            this.progressBar_exp.AutoSize = true;
+            this.progressBar_exp.Location = new System.Drawing.Point(15, 110);
+            this.progressBar_exp.Name = "progressBar_exp";
+            this.progressBar_exp.Size = new System.Drawing.Size(0, 15);
+            this.progressBar_exp.TabIndex = 3;
+            // 
+            // label_level
+            // 
+            this.label_level.Font = new System.Drawing.Font("MS UI Gothic", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.label_level.Location = new System.Drawing.Point(15, 55);
+            this.label_level.Name = "label_level";
+            this.label_level.Size = new System.Drawing.Size(200, 25);
+            this.label_level.TabIndex = 1;
+            this.label_level.Text = "レベル：1";
+            // 
+            // label_characterName
+            // 
+            this.label_characterName.Font = new System.Drawing.Font("MS UI Gothic", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.label_characterName.Location = new System.Drawing.Point(15, 15);
+            this.label_characterName.Name = "label_characterName";
+            this.label_characterName.Size = new System.Drawing.Size(200, 300);
+            this.label_characterName.TabIndex = 0;
+            this.label_characterName.Text = "キャラクター名";
             // 
             // FormNurture
             // 
@@ -230,10 +227,10 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "育成画面";
             this.panel_gameArea.ResumeLayout(false);
-            this.panel_stats.ResumeLayout(false);
-            this.panel_stats.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_extract)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_character)).EndInit();
+            this.panel_stats.ResumeLayout(false);
+            this.panel_stats.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -249,7 +246,6 @@
         private System.Windows.Forms.Label label_attack;
         private System.Windows.Forms.Label label_hp;
         private System.Windows.Forms.Label progressBar_exp;
-        private System.Windows.Forms.Label label_exp;
         private System.Windows.Forms.Label label_extractCount;
         private System.Windows.Forms.Label label_defense;
         private System.Windows.Forms.Button button_back;
@@ -257,5 +253,6 @@
         private System.Windows.Forms.ProgressBar progressBar_defense;
         private System.Windows.Forms.ProgressBar progressBar_attack;
         private System.Windows.Forms.ProgressBar progressBar_hp;
+        private System.Windows.Forms.ProgressBar progressBar_exp2;
     }
 }

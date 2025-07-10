@@ -92,7 +92,7 @@ namespace nurturing
             this.MaximizeBox = false;
             this.StartPosition = FormStartPosition.CenterParent;
 
-            // 背景にグラデーションを設定
+            // 背景にグラデーションを設定（DrawGrassTextureは呼ばない）
             panel_gameArea.Paint += Panel_gameArea_Paint;
 
             // キャラクター画像の設定
@@ -118,6 +118,31 @@ namespace nurturing
             // ボタンのスタイル設定
             StyleButton(button_save, Color.FromArgb(50, 205, 50));
             StyleButton(button_back, Color.FromArgb(30, 144, 255));
+
+            // ProgressBarのスタイル設定（存在する場合）
+            SetupProgressBars();
+        }
+
+        private void SetupProgressBars()
+        {
+            // ProgressBarの色設定
+            if (progressBar_hp != null)
+            {
+                progressBar_hp.Style = ProgressBarStyle.Continuous;
+                progressBar_hp.ForeColor = Color.Red;
+            }
+
+            if (progressBar_attack != null)
+            {
+                progressBar_attack.Style = ProgressBarStyle.Continuous;
+                progressBar_attack.ForeColor = Color.Orange;
+            }
+
+            if (progressBar_defense != null)
+            {
+                progressBar_defense.Style = ProgressBarStyle.Continuous;
+                progressBar_defense.ForeColor = Color.Blue;
+            }
         }
 
         private void DrawExtract()
@@ -233,20 +258,76 @@ namespace nurturing
 
         private void UpdateUI()
         {
-            label_characterName.Text = currentCharacter.Name;
-            label_level.Text = $"レベル: {currentCharacter.Level}";
-            label_exp.Text = $"経験値: {currentCharacter.Experience} / {currentCharacter.MaxExperience}";
-            label_hp.Text = $"体力: {currentCharacter.Health}";
-            label_attack.Text = $"攻撃力: {currentCharacter.Attack}";
-            label_defense.Text = $"防御力: {currentCharacter.Defense}";
-            label_extractCount.Text = $"エキス: {currentCharacter.ExtractCount}";
+            // デバッグ：ProgressBarの存在確認
+            System.Diagnostics.Debug.WriteLine("=== ProgressBar確認 ===");
+            System.Diagnostics.Debug.WriteLine($"progressBar_hp: {progressBar_hp != null}");
+            System.Diagnostics.Debug.WriteLine($"progressBar_attack: {progressBar_attack != null}");
+            System.Diagnostics.Debug.WriteLine($"progressBar_defense: {progressBar_defense != null}");
 
-            // 経験値バーの更新
-            progressBar_exp.Maximum = currentCharacter.MaxExperience;
-            progressBar_exp.Value = currentCharacter.Experience;
+            // null チェックを追加
+            if (label_characterName != null)
+                label_characterName.Text = currentCharacter.Name;
+
+            if (label_level != null)
+                label_level.Text = $"レベル: {currentCharacter.Level}";
+
+            // label_expが存在する場合のみ更新
+            var expLabels = this.Controls.Find("label_exp", true);
+            if (expLabels.Length > 0 && expLabels[0] is Label expLabel)
+            {
+                expLabel.Text = $"経験値: {currentCharacter.Experience} / {currentCharacter.MaxExperience}";
+            }
+
+            if (label_hp != null)
+                label_hp.Text = $"体力: {currentCharacter.Health}";
+
+            if (label_attack != null)
+                label_attack.Text = $"攻撃力: {currentCharacter.Attack}";
+
+            if (label_defense != null)
+                label_defense.Text = $"防御力: {currentCharacter.Defense}";
+
+            if (label_extractCount != null)
+                label_extractCount.Text = $"エキス: {currentCharacter.ExtractCount}";
+
+            // ProgressBarの更新
+            if (progressBar_hp != null)
+            {
+                progressBar_hp.Maximum = 150;
+                progressBar_hp.Value = Math.Min(currentCharacter.Health, 150);
+                System.Diagnostics.Debug.WriteLine($"HP Bar - Max: {progressBar_hp.Maximum}, Value: {progressBar_hp.Value}");
+            }
+
+            if (progressBar_attack != null)
+            {
+                progressBar_attack.Maximum = 100;
+                progressBar_attack.Value = Math.Min(currentCharacter.Attack, 100);
+                System.Diagnostics.Debug.WriteLine($"Attack Bar - Max: {progressBar_attack.Maximum}, Value: {progressBar_attack.Value}");
+            }
+
+            if (progressBar_defense != null)
+            {
+                progressBar_defense.Maximum = 100;
+                progressBar_defense.Value = Math.Min(currentCharacter.Defense, 100);
+                System.Diagnostics.Debug.WriteLine($"Defense Bar - Max: {progressBar_defense.Maximum}, Value: {progressBar_defense.Value}");
+            }
+
+            // 経験値バーの更新（progressBar_experienceを探す）
+            var expBars = this.Controls.Find("progressBar_experience", true);
+            if (expBars.Length > 0 && expBars[0] is ProgressBar expBar)
+            {
+                expBar.Maximum = currentCharacter.MaxExperience;
+                expBar.Value = currentCharacter.Experience;
+                System.Diagnostics.Debug.WriteLine($"Exp Bar - Max: {expBar.Maximum}, Value: {expBar.Value}");
+            }
+            else
+            {
+                System.Diagnostics.Debug.WriteLine("経験値ProgressBarが見つかりません");
+            }
 
             // エキスが0の場合は非表示に
-            pictureBox_extract.Visible = currentCharacter.ExtractCount > 0;
+            if (pictureBox_extract != null)
+                pictureBox_extract.Visible = currentCharacter.ExtractCount > 0;
         }
 
         // ドラッグ&ドロップ処理
