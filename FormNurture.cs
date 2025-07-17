@@ -39,6 +39,15 @@ namespace nurturing
             }
         }
 
+        // 草の位置を保持する構造体
+        private struct GrassPosition
+        {
+            public int X { get; set; }
+            public int Y { get; set; }
+            public int Height { get; set; }
+            public int Direction { get; set; } // -1 or 1 for left/right lean
+        }
+
         private CharacterData currentCharacter;
         private bool isDragging = false;
         private Point dragStartPoint;
@@ -46,6 +55,10 @@ namespace nurturing
         private Timer animationTimer;
         private List<FloatingText> floatingTexts = new List<FloatingText>();
         private Random random = new Random();
+
+        // 草の位置を保持するリスト
+        private List<GrassPosition> grassPositions = new List<GrassPosition>();
+        private Bitmap backgroundBuffer; // ダブルバッファリング用
 
         // 浮遊テキストクラス（経験値表示用）
         private class FloatingText
@@ -59,6 +72,12 @@ namespace nurturing
         public FormNurture(string characterName, string originalName, int health, int attack, int defense, Image characterImage)
         {
             InitializeComponent();
+
+            // ダブルバッファリングを有効化
+            SetStyle(ControlStyles.AllPaintingInWmPaint |
+                    ControlStyles.UserPaint |
+                    ControlStyles.DoubleBuffer |
+                    ControlStyles.ResizeRedraw, true);
 
             // キャラクターデータの初期化
             currentCharacter = new CharacterData
@@ -78,11 +97,57 @@ namespace nurturing
             SetupUI();
             UpdateUI();
 
+            // 草の位置を初期生成
+            GenerateGrassPositions();
+
             // アニメーションタイマーの設定
             animationTimer = new Timer();
             animationTimer.Interval = 50;
             animationTimer.Tick += AnimationTimer_Tick;
             animationTimer.Start();
+        }
+
+        private void GenerateGrassPositions()
+        {
+            grassPositions.Clear();
+
+            // 草の本数を100本に増やして密度を上げる
+            for (int i = 0; i < 100; i++)
+            {
+                grassPositions.Add(new GrassPosition
+                {
+                    X = random.Next(10, panel_gameArea.Width - 10),
+                    Y = random.Next(panel_gameArea.Height / 2, panel_gameArea.Height - 10),
+                    Height = random.Next(15, 30),
+                    Direction = random.Next(2) == 0 ? -1 : 1
+                });
+            }
+
+            // 背景バッファを再生成
+            CreateBackgroundBuffer();
+        }
+
+        private void CreateBackgroundBuffer()
+        {
+            if (backgroundBuffer != null)
+                backgroundBuffer.Dispose();
+
+            backgroundBuffer = new Bitmap(panel_gameArea.Width, panel_gameArea.Height);
+            using (Graphics g = Graphics.FromImage(backgroundBuffer))
+            {
+                // グラデーション背景
+                using (LinearGradientBrush brush = new LinearGradientBrush(
+                    new Rectangle(0, 0, panel_gameArea.Width, panel_gameArea.Height),
+                    Color.FromArgb(144, 238, 144),
+                    Color.FromArgb(34, 139, 34),
+                    LinearGradientMode.Vertical))
+                {
+                    g.FillRectangle(brush, 0, 0, panel_gameArea.Width, panel_gameArea.Height);
+                }
+
+                // 草を描画
+                DrawGrassTexture(g);
+            }
         }
 
         private void SetupUI()
@@ -92,7 +157,14 @@ namespace nurturing
             this.MaximizeBox = false;
             this.StartPosition = FormStartPosition.CenterParent;
 
-            // 背景にグラデーションを設定（DrawGrassTextureは呼ばない）
+            // パネルのダブルバッファリングを有効化
+            typeof(Panel).InvokeMember("DoubleBuffered",
+                System.Reflection.BindingFlags.SetProperty |
+                System.Reflection.BindingFlags.Instance |
+                System.Reflection.BindingFlags.NonPublic,
+                null, panel_gameArea, new object[] { true });
+
+            // 背景描画イベント設定
             panel_gameArea.Paint += Panel_gameArea_Paint;
 
             // キャラクター画像の設定
@@ -192,56 +264,80 @@ namespace nurturing
 
         private void Panel_gameArea_Paint(object sender, PaintEventArgs e)
         {
-            // 草原風の背景を描画
             Graphics g = e.Graphics;
+            g.SmoothingMode = SmoothingMode.HighSpeed;
 
-            // グラデーション背景
-            using (LinearGradientBrush brush = new LinearGradientBrush(
-                panel_gameArea.ClientRectangle,
-                Color.FromArgb(144, 238, 144),
-                Color.FromArgb(34, 139, 34),
-                LinearGradientMode.Vertical))
+            // 背景バッファを描画
+            if (backgroundBuffer != null)
             {
-                g.FillRectangle(brush, panel_gameArea.ClientRectangle);
+                g.DrawImage(backgroundBuffer, 0, 0);
             }
 
-            // 草のテクスチャを描画
-            DrawGrassTexture(g);
-
-            // 浮遊テキストの描画
+            // 浮遊テキストの描画（これは動的なので毎回描画）
             DrawFloatingTexts(g);
         }
 
         private void DrawGrassTexture(Graphics g)
         {
-            Pen grassPen = new Pen(Color.FromArgb(100, 0, 100, 0), 2);
+            g.SmoothingMode = SmoothingMode.AntiAlias;
 
-            for (int i = 0; i < 50; i++)
+            // 草のグラデーションペンを作成
+            foreach (var grass in grassPositions)
             {
-                int x = random.Next(panel_gameArea.Width);
-                int y = random.Next(panel_gameArea.Height);
-                int height = random.Next(10, 20);
+                // 草の色を深さによって変える
+                int colorIntensity = 80 + (grass.Y * 40 / panel_gameArea.Height);
+                Color grassColor = Color.FromArgb(150, 0, colorIntensity, 0);
 
-                g.DrawLine(grassPen, x, y, x - 2, y - height);
-                g.DrawLine(grassPen, x, y, x + 2, y - height);
+                using (Pen grassPen = new Pen(grassColor, 2))
+                {
+                    // 草の根元
+                    int baseX = grass.X;
+                    int baseY = grass.Y;
+
+                    // 草の先端（風に揺れているような効果）
+                    int tipX = baseX + (grass.Direction * grass.Height / 3);
+                    int tipY = baseY - grass.Height;
+
+                    // 曲線を描く
+                    Point[] points = new Point[]
+                    {
+                        new Point(baseX, baseY),
+                        new Point(baseX + grass.Direction * grass.Height / 6, baseY - grass.Height / 2),
+                        new Point(tipX, tipY)
+                    };
+
+                    g.DrawCurve(grassPen, points, 0.5f);
+                }
             }
-
-            grassPen.Dispose();
         }
 
         private void DrawFloatingTexts(Graphics g)
         {
-            Font font = new Font("Arial", 16, FontStyle.Bold);
-
-            foreach (var text in floatingTexts)
+            using (Font font = new Font("Arial", 16, FontStyle.Bold))
             {
-                using (Brush brush = new SolidBrush(Color.FromArgb(text.Life, text.Color)))
+                foreach (var text in floatingTexts)
                 {
-                    g.DrawString(text.Text, font, brush, text.Position);
+                    using (Brush brush = new SolidBrush(Color.FromArgb(text.Life, text.Color)))
+                    {
+                        // 縁取り効果
+                        using (Brush outlineBrush = new SolidBrush(Color.FromArgb(text.Life / 2, Color.Black)))
+                        {
+                            for (int dx = -1; dx <= 1; dx++)
+                            {
+                                for (int dy = -1; dy <= 1; dy++)
+                                {
+                                    if (dx != 0 || dy != 0)
+                                    {
+                                        g.DrawString(text.Text, font, outlineBrush,
+                                            text.Position.X + dx, text.Position.Y + dy);
+                                    }
+                                }
+                            }
+                        }
+                        g.DrawString(text.Text, font, brush, text.Position);
+                    }
                 }
             }
-
-            font.Dispose();
         }
 
         private void StyleButton(Button button, Color color)
@@ -312,17 +408,12 @@ namespace nurturing
                 System.Diagnostics.Debug.WriteLine($"Defense Bar - Max: {progressBar_defense.Maximum}, Value: {progressBar_defense.Value}");
             }
 
-            // 経験値バーの更新（progressBar_experienceを探す）
-            var expBars = this.Controls.Find("progressBar_experience", true);
-            if (expBars.Length > 0 && expBars[0] is ProgressBar expBar)
+            // 経験値バーの更新（progressBar_exp2を使用）
+            if (progressBar_exp2 != null)
             {
-                expBar.Maximum = currentCharacter.MaxExperience;
-                expBar.Value = currentCharacter.Experience;
-                System.Diagnostics.Debug.WriteLine($"Exp Bar - Max: {expBar.Maximum}, Value: {expBar.Value}");
-            }
-            else
-            {
-                System.Diagnostics.Debug.WriteLine("経験値ProgressBarが見つかりません");
+                progressBar_exp2.Maximum = currentCharacter.MaxExperience;
+                progressBar_exp2.Value = currentCharacter.Experience;
+                System.Diagnostics.Debug.WriteLine($"Exp Bar - Max: {progressBar_exp2.Maximum}, Value: {progressBar_exp2.Value}");
             }
 
             // エキスが0の場合は非表示に
@@ -514,6 +605,8 @@ namespace nurturing
 
         private void AnimationTimer_Tick(object sender, EventArgs e)
         {
+            bool needsRedraw = false;
+
             // 浮遊テキストのアニメーション
             for (int i = floatingTexts.Count - 1; i >= 0; i--)
             {
@@ -525,10 +618,14 @@ namespace nurturing
                 {
                     floatingTexts.RemoveAt(i);
                 }
+                needsRedraw = true;
             }
 
-            // パネルを再描画
-            panel_gameArea.Invalidate();
+            // 浮遊テキストがある場合のみ再描画
+            if (needsRedraw)
+            {
+                panel_gameArea.Invalidate();
+            }
         }
 
         // データ保存処理
@@ -642,6 +739,18 @@ namespace nurturing
                 animationTimer.Stop();
                 animationTimer.Dispose();
             }
+
+            // 背景バッファの破棄
+            if (backgroundBuffer != null)
+            {
+                backgroundBuffer.Dispose();
+            }
+        }
+
+        // パネルのサイズ変更時に背景を再生成
+        private void Panel_gameArea_Resize(object sender, EventArgs e)
+        {
+            GenerateGrassPositions();
         }
     }
 }

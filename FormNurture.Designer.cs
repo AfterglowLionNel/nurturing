@@ -89,9 +89,10 @@
             // 
             this.pictureBox_extract.BackColor = System.Drawing.Color.Transparent;
             this.pictureBox_extract.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBox_extract.Location = new System.Drawing.Point(275, 400);
+            this.pictureBox_extract.Location = new System.Drawing.Point(261, 369);
             this.pictureBox_extract.Name = "pictureBox_extract";
-            this.pictureBox_extract.Size = new System.Drawing.Size(50, 50);
+            this.pictureBox_extract.Size = new System.Drawing.Size(75, 75);
+            this.pictureBox_extract.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox_extract.TabIndex = 1;
             this.pictureBox_extract.TabStop = false;
             // 
