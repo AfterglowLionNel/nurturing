@@ -61,6 +61,105 @@ namespace nurturing.Properties {
         }
         
         /// <summary>
+        ///   System.IO.MemoryStream に類似した型 System.IO.UnmanagedMemoryStream のローカライズされたリソースを検索します。
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream Badges___Pikmin_Bloom_OST {
+            get {
+                return ResourceManager.GetStream("Badges___Pikmin_Bloom_OST", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   System.IO.MemoryStream に類似した型 System.IO.UnmanagedMemoryStream のローカライズされたリソースを検索します。
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream Challenge___Pikmin_Bloom_OST {
+            get {
+                return ResourceManager.GetStream("Challenge___Pikmin_Bloom_OST", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   System.IO.MemoryStream に類似した型 System.IO.UnmanagedMemoryStream のローカライズされたリソースを検索します。
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream Challenge__Viewing____Pikmin_Bloom_OST {
+            get {
+                return ResourceManager.GetStream("Challenge__Viewing____Pikmin_Bloom_OST", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   System.IO.MemoryStream に類似した型 System.IO.UnmanagedMemoryStream のローカライズされたリソースを検索します。
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream Daily_Lookback___Pikmin_Bloom_OST {
+            get {
+                return ResourceManager.GetStream("Daily_Lookback___Pikmin_Bloom_OST", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   System.IO.MemoryStream に類似した型 System.IO.UnmanagedMemoryStream のローカライズされたリソースを検索します。
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream Expedition___Pikmin_Bloom_OST {
+            get {
+                return ResourceManager.GetStream("Expedition___Pikmin_Bloom_OST", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   System.IO.MemoryStream に類似した型 System.IO.UnmanagedMemoryStream のローカライズされたリソースを検索します。
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream Lifelog__Main_Menu____Pikmin_Bloom_OST {
+            get {
+                return ResourceManager.GetStream("Lifelog__Main_Menu____Pikmin_Bloom_OST", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   System.IO.MemoryStream に類似した型 System.IO.UnmanagedMemoryStream のローカライズされたリソースを検索します。
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream Lifelog__Main_Menu__Pikmin_Bloom_OST {
+            get {
+                return ResourceManager.GetStream("Lifelog__Main_Menu__Pikmin_Bloom_OST", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   System.IO.MemoryStream に類似した型 System.IO.UnmanagedMemoryStream のローカライズされたリソースを検索します。
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream Pikmin_Park___Pikmin_Bloom_OST {
+            get {
+                return ResourceManager.GetStream("Pikmin_Park___Pikmin_Bloom_OST", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   System.IO.MemoryStream に類似した型 System.IO.UnmanagedMemoryStream のローカライズされたリソースを検索します。
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream Pikmin_Planter___Pikmin_Bloom_OST {
+            get {
+                return ResourceManager.GetStream("Pikmin_Planter___Pikmin_Bloom_OST", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   System.IO.MemoryStream に類似した型 System.IO.UnmanagedMemoryStream のローカライズされたリソースを検索します。
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream Pikmin_Planter_Pikmin_Bloom_OST {
+            get {
+                return ResourceManager.GetStream("Pikmin_Planter_Pikmin_Bloom_OST", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   System.IO.MemoryStream に類似した型 System.IO.UnmanagedMemoryStream のローカライズされたリソースを検索します。
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream Planting_Flowers___Pikmin_Bloom_OST {
+            get {
+                return ResourceManager.GetStream("Planting_Flowers___Pikmin_Bloom_OST", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
         /// </summary>
         internal static System.Drawing.Bitmap RedPikumin {
@@ -77,6 +176,60 @@ namespace nurturing.Properties {
             get {
                 object obj = ResourceManager.GetObject("RockPikumin", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   System.IO.MemoryStream に類似した型 System.IO.UnmanagedMemoryStream のローカライズされたリソースを検索します。
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream Shop___Pikmin_Bloom_OST {
+            get {
+                return ResourceManager.GetStream("Shop___Pikmin_Bloom_OST", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   System.IO.MemoryStream に類似した型 System.IO.UnmanagedMemoryStream のローカライズされたリソースを検索します。
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream Walking__Map_Theme____Pikmin_Bloom_OST {
+            get {
+                return ResourceManager.GetStream("Walking__Map_Theme____Pikmin_Bloom_OST", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   System.IO.MemoryStream に類似した型 System.IO.UnmanagedMemoryStream のローカライズされたリソースを検索します。
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream Walking__Map_Theme__Pikmin_Bloom_OST {
+            get {
+                return ResourceManager.GetStream("Walking__Map_Theme__Pikmin_Bloom_OST", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   System.IO.MemoryStream に類似した型 System.IO.UnmanagedMemoryStream のローカライズされたリソースを検索します。
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream Weekly_Challenge___Pikmin_Bloom_OST {
+            get {
+                return ResourceManager.GetStream("Weekly_Challenge___Pikmin_Bloom_OST", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   System.IO.MemoryStream に類似した型 System.IO.UnmanagedMemoryStream のローカライズされたリソースを検索します。
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream Weekly_Challenge__Preview____Pikmin_Bloom_OST {
+            get {
+                return ResourceManager.GetStream("Weekly_Challenge__Preview____Pikmin_Bloom_OST", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   System.IO.MemoryStream に類似した型 System.IO.UnmanagedMemoryStream のローカライズされたリソースを検索します。
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream Welcome_To_Pikmin_Bloom____Pikmin_Bloom_OST {
+            get {
+                return ResourceManager.GetStream("Welcome_To_Pikmin_Bloom____Pikmin_Bloom_OST", resourceCulture);
             }
         }
         

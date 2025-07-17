@@ -9,11 +9,11 @@ using System.Drawing.Text;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Reflection.Emit;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using NAudio.Wave;
 
 namespace nurturing
 {
@@ -31,95 +31,96 @@ namespace nurturing
             public Color ThemeColor { get; set; }
         }
 
-        // キャラクターリスト
+        // キャラクターリストと状態管理
         private List<CharacterInfo> characters;
         private int currentIndex = 0;
         private Timer animationTimer;
         private int animationStep = 0;
         private bool isAnimating = false;
-        private string[] customNames;  // 各キャラクターのカスタム名を保存
+        private string[] customNames;
 
         // UI要素
         private Panel statsPanel;
-        private System.Windows.Forms.Label lblDescription;
+        private Label lblDescription;
         private ProgressBar healthBar;
         private ProgressBar attackBar;
         private ProgressBar defenseBar;
-        private System.Windows.Forms.Label lblHealth;
-        private System.Windows.Forms.Label lblAttack;
-        private System.Windows.Forms.Label lblDefense;
+        private Label lblHealth;
+        private Label lblAttack;
+        private Label lblDefense;
+        private TrackBar trackBarVolume;
 
-        // カスタムフォント
+        // フォント
         private PrivateFontCollection privateFonts;
         private Font titleFont;
         private Font labelFont;
         private Font statsFont;
+
+        // サウンド
+        private WaveOutEvent outputDevice;
+        private WaveStream audioStream;
 
         public Form_Pick()
         {
             InitializeComponent();
             this.AutoScaleMode = AutoScaleMode.None;
 
-            // カスタムフォントの読み込み
-            LoadCustomFonts();
-
-            // フォームのデザイン設定
+            //LoadCustomFonts();
             SetupFormDesign();
-
             InitializeCharacters();
             SetupUI();
             UpdateDisplay();
 
-            // アニメーション用タイマー
             animationTimer = new Timer();
             animationTimer.Interval = 10;
             animationTimer.Tick += AnimationTimer_Tick;
 
-            // イベントハンドラ
             button_submitPick.Click += Button_submitPick_Click;
             button_changeName.Click += Button_changeName_Click;
+
+            this.Load += Form_Pick_Load;
         }
 
-        private void LoadCustomFonts()
+        private void Form_Pick_Load(object sender, EventArgs e)
         {
-            privateFonts = new PrivateFontCollection();
+            var rawStream = Properties.Resources.Lifelog__Main_Menu____Pikmin_Bloom_OST;
+            audioStream = new WaveFileReader(rawStream);
+            outputDevice = new WaveOutEvent();
+            outputDevice.Init(audioStream);
+            outputDevice.Volume = 0.5f;
+            outputDevice.Play();
 
-            // デフォルトフォントの設定（カスタムフォントが読み込めない場合の代替）
-            titleFont = new Font("メイリオ", 24, FontStyle.Bold);
-            labelFont = new Font("メイリオ", 14, FontStyle.Bold);
-            statsFont = new Font("メイリオ", 11, FontStyle.Regular);
+            trackBarVolume = new TrackBar();
+            trackBarVolume.Minimum = 0;
+            trackBarVolume.Maximum = 100;
+            trackBarVolume.Value = 50;
+            trackBarVolume.TickFrequency = 10;
+            trackBarVolume.SmallChange = 5;
+            trackBarVolume.LargeChange = 10;
+            trackBarVolume.Location = new Point(30, this.ClientSize.Height - 60);
+            trackBarVolume.Size = new Size(200, 30);
+            trackBarVolume.Scroll += TrackBarVolume_Scroll;
+            this.Controls.Add(trackBarVolume);
+        }
 
-            // カスタムフォントの読み込み
-            try
+        private void TrackBarVolume_Scroll(object sender, EventArgs e)
+        {
+            if (outputDevice != null)
             {
-                // フォントファイルがプロジェクトのFontsフォルダにある場合
-                string[] fontFiles = {
-                    "nurturing.Fonts.YourFont.ttf",  // 実際のフォントファイル名に変更してください
-                    // 複数のフォントファイルがある場合はここに追加
-                };
-
-                foreach (string fontFile in fontFiles)
-                {
-                    LoadFontFromResource(fontFile);
-                }
-
-                // フォントが正常に読み込まれた場合
-                if (privateFonts.Families.Length > 0)
-                {
-                    // 最初に読み込まれたフォントを使用
-                    var fontFamily = privateFonts.Families[0];
-                    titleFont = new Font(fontFamily, 24, FontStyle.Bold);
-                    labelFont = new Font(fontFamily, 14, FontStyle.Bold);
-                    statsFont = new Font(fontFamily, 11, FontStyle.Regular);
-
-                    Console.WriteLine($"カスタムフォント '{fontFamily.Name}' を読み込みました。");
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"フォント読み込みエラー: {ex.Message}");
+                outputDevice.Volume = trackBarVolume.Value / 100f;
             }
         }
+
+        protected override void OnFormClosed(FormClosedEventArgs e)
+        {
+            outputDevice?.Stop();
+            outputDevice?.Dispose();
+            audioStream?.Dispose();
+            base.OnFormClosed(e);
+        }
+
+
+
 
         private void LoadFontFromResource(string resourceName)
         {

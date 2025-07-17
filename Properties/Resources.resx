@@ -127,4 +127,55 @@
   <data name="WingPikumin" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\WingPikumin.jpeg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Badges___Pikmin_Bloom_OST" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Badges - Pikmin Bloom OST.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="Challenge__Viewing____Pikmin_Bloom_OST" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Challenge (Viewing) - Pikmin Bloom OST.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="Challenge___Pikmin_Bloom_OST" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Challenge - Pikmin Bloom OST.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="Daily_Lookback___Pikmin_Bloom_OST" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Daily Lookback - Pikmin Bloom OST.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="Expedition___Pikmin_Bloom_OST" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Expedition - Pikmin Bloom OST.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="Lifelog__Main_Menu__Pikmin_Bloom_OST" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Lifelog-_Main-Menu_-Pikmin-Bloom-OST.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="Lifelog__Main_Menu____Pikmin_Bloom_OST" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Lifelog (Main Menu) - Pikmin Bloom OST.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="Pikmin_Park___Pikmin_Bloom_OST" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Pikmin Park - Pikmin Bloom OST.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="Pikmin_Planter_Pikmin_Bloom_OST" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Pikmin-Planter-Pikmin-Bloom-OST.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="Pikmin_Planter___Pikmin_Bloom_OST" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Pikmin Planter - Pikmin Bloom OST.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="Planting_Flowers___Pikmin_Bloom_OST" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Planting Flowers - Pikmin Bloom OST.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="Shop___Pikmin_Bloom_OST" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Shop - Pikmin Bloom OST.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="Walking__Map_Theme__Pikmin_Bloom_OST" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Walking-_Map-Theme_-Pikmin-Bloom-OST.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="Walking__Map_Theme____Pikmin_Bloom_OST" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Walking (Map Theme) - Pikmin Bloom OST.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="Weekly_Challenge__Preview____Pikmin_Bloom_OST" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Weekly Challenge (Preview) - Pikmin Bloom OST.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="Weekly_Challenge___Pikmin_Bloom_OST" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Weekly Challenge - Pikmin Bloom OST.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="Welcome_To_Pikmin_Bloom____Pikmin_Bloom_OST" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Welcome To Pikmin Bloom! - Pikmin Bloom OST.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
 </root>
