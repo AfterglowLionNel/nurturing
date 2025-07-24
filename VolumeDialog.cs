@@ -68,6 +68,13 @@ namespace nurturing
 
             AcceptButton = btnOk;
             CancelButton = btnCancel;
+
+            btnOk.Click += (s, e) =>
+            {
+                SettingsManager.SoundVolume = SelectedVolume;
+                Console.WriteLine("[DEBUG] Saved volume: " + SelectedVolume);
+            };
+
         }
 
         private void TrackBar_Scroll(object sender, EventArgs e)

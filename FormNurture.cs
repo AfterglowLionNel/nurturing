@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.IO;
@@ -65,6 +66,10 @@ namespace nurturing
         private readonly Random random = new Random();
         private readonly List<GrassPosition> grassPositions = new List<GrassPosition>();
         private Bitmap backgroundBuffer;
+        private Size originalCharacterSize;
+        private Point originalCharacterLocation;
+
+
 
         // ===== サウンド =====
         private WaveOutEvent outputDevice;
@@ -277,6 +282,44 @@ namespace nurturing
             }
         }
 
+        private void PlaySoundEffect(string fileName)
+        {
+            try
+            {
+                string path = Path.Combine(Application.StartupPath, "Sounds", fileName);
+                if (!File.Exists(path))
+                {
+                    Debug.WriteLine($"ファイルが見つかりません: {path}");
+                    return;
+                }
+
+                var reader = new AudioFileReader(path);
+                Debug.WriteLine($"[DEBUG] SoundVolume raw: '{SettingsManager.SoundVolume}'");
+
+                var volumeProvider = new VolumeSampleProvider(reader.ToSampleProvider())
+                {
+                    Volume = SettingsManager.SoundVolume
+                };
+
+                var waveOut = new WaveOutEvent();
+                waveOut.Init(volumeProvider);
+                waveOut.Play();
+
+                waveOut.PlaybackStopped += (s, e) =>
+                {
+                    waveOut.Dispose();
+                    reader.Dispose();
+                };
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("効果音再生エラー: " + ex.Message);
+            }
+        }
+
+
+
+
         //================ UI =================
         private void SetupUI()
         {
@@ -310,6 +353,10 @@ namespace nurturing
             StyleButton(button_back, Color.FromArgb(30, 144, 255));
 
             SetupProgressBars();
+
+            originalCharacterSize = pictureBox_character.Size;
+            originalCharacterLocation = pictureBox_character.Location;
+
         }
 
         private void SetupProgressBars()
@@ -556,6 +603,7 @@ namespace nurturing
             UpdateUI();
             SaveAll();      // オートセーブ
             PlayFeedEffect();
+            PlaySoundEffect("Ekisu2.mp3");
         }
 
         private void CheckLevelUp()
@@ -608,23 +656,25 @@ namespace nurturing
                 if (count < 5)
                 {
                     pictureBox_character.Size = new Size(
-                        pictureBox_character.Width + 2,
-                        pictureBox_character.Height + 2);
+                        originalCharacterSize.Width + 2,
+                        originalCharacterSize.Height + 2);
                     pictureBox_character.Location = new Point(
-                        pictureBox_character.Location.X - 1,
-                        pictureBox_character.Location.Y - 1);
+                        originalCharacterLocation.X - 1,
+                        originalCharacterLocation.Y - 1);
                 }
                 else if (count < 10)
                 {
                     pictureBox_character.Size = new Size(
-                        pictureBox_character.Width - 2,
-                        pictureBox_character.Height - 2);
+                        originalCharacterSize.Width - 2,
+                        originalCharacterSize.Height - 2);
                     pictureBox_character.Location = new Point(
-                        pictureBox_character.Location.X + 1,
-                        pictureBox_character.Location.Y + 1);
+                        originalCharacterLocation.X + 1,
+                        originalCharacterLocation.Y + 1);
                 }
                 else
                 {
+                    pictureBox_character.Size = originalCharacterSize;
+                    pictureBox_character.Location = originalCharacterLocation;
                     effectTimer.Stop();
                     effectTimer.Dispose();
                 }
@@ -632,6 +682,7 @@ namespace nurturing
 
             effectTimer.Start();
         }
+
 
         private void AnimationTimer_Tick(object sender, EventArgs e)
         {
@@ -749,6 +800,17 @@ namespace nurturing
         private void Panel_gameArea_Resize(object sender, EventArgs e)
         {
             GenerateGrassPositions();
+        }
+
+        private void pictureBox_extract_Click(object sender, EventArgs e)
+        {
+            PlaySoundEffect("Ekisu2.mp3");
+        }
+
+        private void button_back_Click_1(object sender, EventArgs e)
+        {
+            PlaySoundEffect("Back.mp3");
+
         }
     }
 }

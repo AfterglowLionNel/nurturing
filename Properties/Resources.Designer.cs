@@ -61,6 +61,16 @@ namespace nurturing.Properties {
         }
         
         /// <summary>
+        ///   型 System.Byte[] のローカライズされたリソースを検索します。
+        /// </summary>
+        internal static byte[] Back {
+            get {
+                object obj = ResourceManager.GetObject("Back", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
         ///   System.IO.MemoryStream に類似した型 System.IO.UnmanagedMemoryStream のローカライズされたリソースを検索します。
         /// </summary>
         internal static System.IO.UnmanagedMemoryStream Badges___Pikmin_Bloom_OST {
@@ -93,6 +103,36 @@ namespace nurturing.Properties {
         internal static System.IO.UnmanagedMemoryStream Daily_Lookback___Pikmin_Bloom_OST {
             get {
                 return ResourceManager.GetStream("Daily_Lookback___Pikmin_Bloom_OST", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   型 System.Byte[] のローカライズされたリソースを検索します。
+        /// </summary>
+        internal static byte[] Decide {
+            get {
+                object obj = ResourceManager.GetObject("Decide", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   型 System.Byte[] のローカライズされたリソースを検索します。
+        /// </summary>
+        internal static byte[] Ekisu {
+            get {
+                object obj = ResourceManager.GetObject("Ekisu", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   型 System.Byte[] のローカライズされたリソースを検索します。
+        /// </summary>
+        internal static byte[] Ekisu2 {
+            get {
+                object obj = ResourceManager.GetObject("Ekisu2", resourceCulture);
+                return ((byte[])(obj));
             }
         }
         

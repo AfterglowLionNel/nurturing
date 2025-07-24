@@ -94,7 +94,6 @@
     <Compile Include="FormNurture.Designer.cs">
       <DependentUpon>FormNurture.cs</DependentUpon>
     </Compile>
-    <Compile Include="GameSettings.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\LoopStream.cs" />
@@ -204,6 +203,18 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\RedPikmin.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Back.mp3" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Ekisu2.mp3" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Decide.mp3" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Ekisu.mp3" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

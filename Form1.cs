@@ -40,6 +40,9 @@ namespace nurturing
         private int animationStep = 0;
         private bool isAnimating = false;
         private string[] customNames;               // CSV から読み取ったカスタム名
+        private WaveOutEvent seOutputDevice;
+        private AudioFileReader seAudioReader;
+
 
         // ステータス UI
         private Panel statsPanel;
@@ -252,6 +255,42 @@ namespace nurturing
             }
         }
 
+        private void PlaySoundEffect(string fileName)
+        {
+            try
+            {
+                string path = Path.Combine(Application.StartupPath, "Sounds", fileName);
+                if (!File.Exists(path))
+                {
+                    Debug.WriteLine($"ファイルが見つかりません: {path}");
+                    return;
+                }
+
+                var reader = new AudioFileReader(path);
+                reader.Volume = SettingsManager.SoundVolume;
+
+                Debug.WriteLine($"[DEBUG] reader.Volume = {reader.Volume}"); // ← これ追加
+
+                var waveOut = new WaveOutEvent();
+                waveOut.Init(reader);
+                waveOut.Play();
+
+                waveOut.PlaybackStopped += (s, e) =>
+                {
+                    waveOut.Dispose();
+                    reader.Dispose();
+                };
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("効果音再生エラー: " + ex.Message);
+            }
+        }
+
+
+
+
+
         //==================== フォームロード ====================
         private void Form_Pick_Load(object sender, EventArgs e)
         {
@@ -408,6 +447,11 @@ namespace nurturing
             pictureBox2.SizeMode = PictureBoxSizeMode.StretchImage;
             pictureBox3.BackColor = Color.Transparent;
             pictureBox3.SizeMode = PictureBoxSizeMode.StretchImage;
+
+            label_Chara1.BackColor = Color.Transparent;
+            label_Chara2.BackColor = Color.Transparent;
+            label_Chara3.BackColor = Color.Transparent;
+
         }
 
         private void StyleButton(WinButton btn, Color color)
@@ -614,6 +658,9 @@ namespace nurturing
 
         private void Button_submitPick_Click(object sender, EventArgs e)
         {
+            PlaySoundEffect("Decide.mp3"); // ← ここで再生
+
+            // 以下は既存の処理
             string finalName = string.IsNullOrEmpty(customNames[currentIndex]) ?
                                characters[currentIndex].Name : customNames[currentIndex];
 
@@ -648,6 +695,7 @@ namespace nurturing
             Form_Pick_Load(this, EventArgs.Empty); // BGM 再開
         }
 
+
         private void Button_changeName_Click(object sender, EventArgs e)
         {
             var dlg = new FormNameChange
@@ -665,5 +713,11 @@ namespace nurturing
             }
             finally { dlg.Dispose(); }
         }
+
+        private void button_submitPick_Click_1(object sender, EventArgs e)
+        {
+            PlaySoundEffect("Decide.mp3");
+        }
+
     }
 }
