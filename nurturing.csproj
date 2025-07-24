@@ -94,8 +94,11 @@
     <Compile Include="FormNurture.Designer.cs">
       <DependentUpon>FormNurture.cs</DependentUpon>
     </Compile>
+    <Compile Include="GameSettings.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resources\LoopStream.cs" />
+    <Compile Include="SettingsManager.cs" />
     <Compile Include="VolumeDialog.cs">
       <SubType>Form</SubType>
     </Compile>

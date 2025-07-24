@@ -37,7 +37,6 @@
             this.panel_stats = new System.Windows.Forms.Panel();
             this.progressBar_exp2 = new System.Windows.Forms.ProgressBar();
             this.button_back = new System.Windows.Forms.Button();
-            this.button_save = new System.Windows.Forms.Button();
             this.label_extractCount = new System.Windows.Forms.Label();
             this.label_defense = new System.Windows.Forms.Label();
             this.label_attack = new System.Windows.Forms.Label();
@@ -54,9 +53,6 @@
             // panel_gameArea
             // 
             this.panel_gameArea.BackColor = System.Drawing.Color.LightGreen;
-            this.panel_gameArea.Controls.Add(this.progressBar_defense);
-            this.panel_gameArea.Controls.Add(this.progressBar_attack);
-            this.panel_gameArea.Controls.Add(this.progressBar_hp);
             this.panel_gameArea.Controls.Add(this.pictureBox_extract);
             this.panel_gameArea.Controls.Add(this.pictureBox_character);
             this.panel_gameArea.Location = new System.Drawing.Point(12, 12);
@@ -66,21 +62,21 @@
             // 
             // progressBar_defense
             // 
-            this.progressBar_defense.Location = new System.Drawing.Point(15, 230);
+            this.progressBar_defense.Location = new System.Drawing.Point(3, 318);
             this.progressBar_defense.Name = "progressBar_defense";
             this.progressBar_defense.Size = new System.Drawing.Size(200, 20);
             this.progressBar_defense.TabIndex = 4;
             // 
             // progressBar_attack
             // 
-            this.progressBar_attack.Location = new System.Drawing.Point(15, 200);
+            this.progressBar_attack.Location = new System.Drawing.Point(3, 252);
             this.progressBar_attack.Name = "progressBar_attack";
             this.progressBar_attack.Size = new System.Drawing.Size(200, 20);
             this.progressBar_attack.TabIndex = 3;
             // 
             // progressBar_hp
             // 
-            this.progressBar_hp.Location = new System.Drawing.Point(15, 170);
+            this.progressBar_hp.Location = new System.Drawing.Point(3, 173);
             this.progressBar_hp.Name = "progressBar_hp";
             this.progressBar_hp.Size = new System.Drawing.Size(200, 20);
             this.progressBar_hp.TabIndex = 2;
@@ -110,9 +106,11 @@
             // 
             this.panel_stats.BackColor = System.Drawing.Color.White;
             this.panel_stats.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel_stats.Controls.Add(this.progressBar_defense);
             this.panel_stats.Controls.Add(this.progressBar_exp2);
+            this.panel_stats.Controls.Add(this.progressBar_attack);
             this.panel_stats.Controls.Add(this.button_back);
-            this.panel_stats.Controls.Add(this.button_save);
+            this.panel_stats.Controls.Add(this.progressBar_hp);
             this.panel_stats.Controls.Add(this.label_extractCount);
             this.panel_stats.Controls.Add(this.label_defense);
             this.panel_stats.Controls.Add(this.label_attack);
@@ -127,7 +125,7 @@
             // 
             // progressBar_exp2
             // 
-            this.progressBar_exp2.Location = new System.Drawing.Point(15, 110);
+            this.progressBar_exp2.Location = new System.Drawing.Point(3, 84);
             this.progressBar_exp2.Name = "progressBar_exp2";
             this.progressBar_exp2.Size = new System.Drawing.Size(200, 23);
             this.progressBar_exp2.TabIndex = 10;
@@ -135,28 +133,18 @@
             // button_back
             // 
             this.button_back.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.button_back.Location = new System.Drawing.Point(130, 340);
+            this.button_back.Location = new System.Drawing.Point(78, 455);
             this.button_back.Name = "button_back";
             this.button_back.Size = new System.Drawing.Size(100, 40);
             this.button_back.TabIndex = 9;
             this.button_back.Text = "戻る";
             this.button_back.UseVisualStyleBackColor = true;
             // 
-            // button_save
-            // 
-            this.button_save.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.button_save.Location = new System.Drawing.Point(15, 340);
-            this.button_save.Name = "button_save";
-            this.button_save.Size = new System.Drawing.Size(100, 40);
-            this.button_save.TabIndex = 8;
-            this.button_save.Text = "保存";
-            this.button_save.UseVisualStyleBackColor = true;
-            // 
             // label_extractCount
             // 
             this.label_extractCount.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
             this.label_extractCount.ForeColor = System.Drawing.Color.Black;
-            this.label_extractCount.Location = new System.Drawing.Point(15, 260);
+            this.label_extractCount.Location = new System.Drawing.Point(3, 377);
             this.label_extractCount.Name = "label_extractCount";
             this.label_extractCount.Size = new System.Drawing.Size(200, 20);
             this.label_extractCount.TabIndex = 7;
@@ -165,7 +153,7 @@
             // label_defense
             // 
             this.label_defense.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.label_defense.Location = new System.Drawing.Point(15, 210);
+            this.label_defense.Location = new System.Drawing.Point(-1, 295);
             this.label_defense.Name = "label_defense";
             this.label_defense.Size = new System.Drawing.Size(200, 20);
             this.label_defense.TabIndex = 6;
@@ -174,7 +162,7 @@
             // label_attack
             // 
             this.label_attack.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.label_attack.Location = new System.Drawing.Point(15, 180);
+            this.label_attack.Location = new System.Drawing.Point(3, 229);
             this.label_attack.Name = "label_attack";
             this.label_attack.Size = new System.Drawing.Size(200, 20);
             this.label_attack.TabIndex = 5;
@@ -183,7 +171,7 @@
             // label_hp
             // 
             this.label_hp.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.label_hp.Location = new System.Drawing.Point(15, 150);
+            this.label_hp.Location = new System.Drawing.Point(3, 150);
             this.label_hp.Name = "label_hp";
             this.label_hp.Size = new System.Drawing.Size(200, 20);
             this.label_hp.TabIndex = 4;
@@ -250,7 +238,6 @@
         private System.Windows.Forms.Label label_extractCount;
         private System.Windows.Forms.Label label_defense;
         private System.Windows.Forms.Button button_back;
-        private System.Windows.Forms.Button button_save;
         private System.Windows.Forms.ProgressBar progressBar_defense;
         private System.Windows.Forms.ProgressBar progressBar_attack;
         private System.Windows.Forms.ProgressBar progressBar_hp;

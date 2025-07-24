@@ -1,14 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Drawing.Text;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Windows.Forms;
 using NAudio.Wave;
 using NAudio.Wave.SampleProviders;
+using nurturing;
 
 // 型名衝突回避
 using WinButton = System.Windows.Forms.Button;
@@ -21,7 +24,7 @@ namespace nurturing
         //==================== キャラクター情報 ====================
         private class CharacterInfo
         {
-            public string Name { get; set; }
+            public string Name { get; set; }   // OriginalName と同じ
             public Image Image { get; set; }
             public string Description { get; set; }
             public int Health { get; set; }
@@ -36,9 +39,9 @@ namespace nurturing
         private Timer animationTimer;
         private int animationStep = 0;
         private bool isAnimating = false;
-        private string[] customNames;
+        private string[] customNames;               // CSV から読み取ったカスタム名
 
-        // ステータスUI
+        // ステータス UI
         private Panel statsPanel;
         private Label lblDescription;
         private WinProgressBar healthBar;
@@ -60,7 +63,7 @@ namespace nurturing
         private MemoryStream wavMemStream;
         private WaveFileReader fileReader;
         private VolumeSampleProvider volumeProvider;
-        private bool bgmInitialized = false;   // 二重初期化防止
+        private bool bgmInitialized = false;
 
         // メニュー
         private MenuStrip menuStrip;
@@ -78,13 +81,14 @@ namespace nurturing
 
             SetupMenu();
             SetupFormDesign();
-            InitializeCharacters();
+            InitializeCharacters();      // デフォルト名で構築
+            LoadSavedNamesFromCsv();     // CSV があれば customNames[] にロード
             SetupUI();
             UpdateDisplay();
 
             if (customFamily != null)
             {
-                ApplyFontToAllControls(this, customFamily, menuStrip); // ToolStrip除外
+                ApplyFontToAllControls(this, customFamily, menuStrip); // ToolStrip は除外
                 label_Title.Font = new Font(customFamily, 28, FontStyle.Bold);
                 label_Chara1.Font = new Font(customFamily, 18, FontStyle.Bold);
                 label_Chara2.Font = new Font(customFamily, 18, FontStyle.Bold);
@@ -104,6 +108,44 @@ namespace nurturing
             this.Load += Form_Pick_Load;
         }
 
+        //==================== CSV からカスタム名をロード ====================
+        private void LoadSavedNamesFromCsv()
+        {
+            try
+            {
+                string saveDir = Path.Combine(Application.StartupPath, "SaveData");
+                if (!Directory.Exists(saveDir)) return;
+
+                for (int i = 0; i < characters.Count; i++)
+                {
+                    string originalName = characters[i].Name;                // ファイル名 = OriginalName.csv
+                    string path = Path.Combine(saveDir, originalName + ".csv");
+                    if (!File.Exists(path)) continue;
+
+                    using (StreamReader sr = new StreamReader(path, Encoding.UTF8))
+                    {
+                        sr.ReadLine();                      // ヘッダー
+                        string line = sr.ReadLine();        // データ行
+                        if (string.IsNullOrEmpty(line)) continue;
+
+                        string[] cols = line.Split(',');
+                        if (cols.Length > 0)
+                        {
+                            string savedName = cols[0].Trim();
+                            if (!string.IsNullOrEmpty(savedName) && savedName != originalName)
+                            {
+                                customNames[i] = savedName;
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("CSV 読み込みエラー: " + ex.Message);
+            }
+        }
+
         //==================== メニュー ====================
         private void SetupMenu()
         {
@@ -114,7 +156,7 @@ namespace nurturing
 
             toolsMenuItem.DropDownItems.Add(volumeMenuItem);
             menuStrip.Items.Add(toolsMenuItem);
-            menuStrip.Font = SystemFonts.MenuFont; // 太字防止
+            menuStrip.Font = SystemFonts.MenuFont; // ToolStrip は太字にしない
 
             this.MainMenuStrip = menuStrip;
             this.Controls.Add(menuStrip);
@@ -123,17 +165,15 @@ namespace nurturing
 
         private void VolumeMenuItem_Click(object sender, EventArgs e)
         {
-            int currentPercent = volumeProvider != null ? (int)(volumeProvider.Volume * 100f) : 30;
-            using (var dlg = new VolumeDialog(currentPercent))
+            int cur = volumeProvider != null ? (int)(volumeProvider.Volume * 100f) : 30;
+            var dlg = new VolumeDialog(cur);
+            dlg.VolumeChanged += v => SetVolume(v); // スライダー移動で即反映
+            try
             {
-                // リアルタイム反映
-                dlg.VolumeChanged += v => SetVolume(v);
-
                 if (dlg.ShowDialog(this) == DialogResult.OK && volumeProvider != null)
-                {
-                    SetVolume(dlg.SelectedVolume); // 最終値を反映
-                }
+                    SetVolume(dlg.SelectedVolume);
             }
+            finally { dlg.Dispose(); }
         }
 
         private void SetVolume(float v)
@@ -146,7 +186,7 @@ namespace nurturing
             if (v <= 0.0001f)
             {
                 if (outputDevice.PlaybackState == PlaybackState.Playing)
-                    outputDevice.Pause();   // 完全ミュート
+                    outputDevice.Pause();
             }
             else
             {
@@ -157,22 +197,23 @@ namespace nurturing
 
         //==================== フォント読み込み ====================
         [DllImport("gdi32.dll")]
-        private static extern IntPtr AddFontMemResourceEx(IntPtr pbFont, uint cbFont, IntPtr pdv, [In] ref uint pcFonts);
+        private static extern IntPtr AddFontMemResourceEx(IntPtr pbFont, uint cbFont,
+                                                          IntPtr pdv, [In] ref uint pcFonts);
 
         private void LoadCustomFonts()
         {
             privateFonts = new PrivateFontCollection();
             try
             {
-                byte[] fontData = Properties.Resources.pikminneue; // リソース名確認
-                IntPtr fontPtr = Marshal.AllocCoTaskMem(fontData.Length);
-                Marshal.Copy(fontData, 0, fontPtr, fontData.Length);
+                byte[] fontData = Properties.Resources.pikminneue; // .otf をプロジェクトリソースに追加済み
+                IntPtr ptr = Marshal.AllocCoTaskMem(fontData.Length);
+                Marshal.Copy(fontData, 0, ptr, fontData.Length);
 
                 uint dummy = 0;
-                privateFonts.AddMemoryFont(fontPtr, fontData.Length);
-                AddFontMemResourceEx(fontPtr, (uint)fontData.Length, IntPtr.Zero, ref dummy);
+                privateFonts.AddMemoryFont(ptr, fontData.Length);
+                AddFontMemResourceEx(ptr, (uint)fontData.Length, IntPtr.Zero, ref dummy);
 
-                Marshal.FreeCoTaskMem(fontPtr);
+                Marshal.FreeCoTaskMem(ptr);
 
                 if (privateFonts.Families.Length > 0)
                 {
@@ -184,7 +225,7 @@ namespace nurturing
             }
             catch (Exception ex)
             {
-                Console.WriteLine("フォント読み込み失敗: " + ex.Message);
+                Debug.WriteLine("フォント読み込み失敗: " + ex.Message);
             }
         }
 
@@ -195,23 +236,18 @@ namespace nurturing
             if (statsFont == null) statsFont = new Font("MS UI Gothic", 11, FontStyle.Regular);
         }
 
-        private void ApplyFontToAllControls(Control root, FontFamily fam, params Control[] excludeControls)
+        private void ApplyFontToAllControls(Control root, FontFamily fam, params Control[] excludes)
         {
             foreach (Control c in root.Controls)
             {
-                bool excluded = false;
-                foreach (var ex in excludeControls)
-                {
-                    if (ex != null && (c == ex || ex.Contains(c)))
-                    {
-                        excluded = true;
-                        break;
-                    }
-                }
-                if (!excluded)
+                bool skip = false;
+                foreach (var ex in excludes)
+                    if (ex != null && (c == ex || ex.Contains(c))) { skip = true; break; }
+
+                if (!skip)
                 {
                     c.Font = new Font(fam, c.Font.Size, c.Font.Style);
-                    if (c.HasChildren) ApplyFontToAllControls(c, fam, excludeControls);
+                    if (c.HasChildren) ApplyFontToAllControls(c, fam, excludes);
                 }
             }
         }
@@ -233,10 +269,7 @@ namespace nurturing
 
             fileReader = new WaveFileReader(wavMemStream);
             var loop = new LoopStream(fileReader);
-            volumeProvider = new VolumeSampleProvider(loop.ToSampleProvider())
-            {
-                Volume = 0.3f // デフォルト30%
-            };
+            volumeProvider = new VolumeSampleProvider(loop.ToSampleProvider()) { Volume = 0.3f };
 
             outputDevice = new WaveOutEvent();
             outputDevice.Init(volumeProvider);
@@ -249,7 +282,6 @@ namespace nurturing
 
             outputDevice?.Dispose();
             outputDevice = null;
-
             volumeProvider = null;
 
             fileReader?.Dispose();
@@ -276,13 +308,13 @@ namespace nurturing
         {
             this.Paint += (s, e) =>
             {
-                using (var brush = new LinearGradientBrush(
+                using (var br = new LinearGradientBrush(
                     this.ClientRectangle,
                     Color.FromArgb(240, 248, 255),
                     Color.FromArgb(176, 224, 230),
                     LinearGradientMode.Vertical))
                 {
-                    e.Graphics.FillRectangle(brush, this.ClientRectangle);
+                    e.Graphics.FillRectangle(br, this.ClientRectangle);
                 }
             };
 
@@ -313,55 +345,50 @@ namespace nurturing
                 TextAlign = ContentAlignment.TopLeft
             };
 
-            int barY = 60;
-            int barHeight = 20;
-            int spacing = 30;
+            int y0 = 60, h = 20, sp = 30;
 
             lblHealth = new Label
             {
                 Text = "体力",
-                Location = new Point(15, barY),
+                Location = new Point(15, y0),
                 Size = new Size(50, 20),
                 Font = statsFont,
                 BackColor = Color.Transparent
             };
-
             healthBar = new WinProgressBar
             {
-                Location = new Point(70, barY),
-                Size = new Size(200, barHeight),
+                Location = new Point(70, y0),
+                Size = new Size(200, h),
                 Style = ProgressBarStyle.Continuous
             };
 
             lblAttack = new Label
             {
                 Text = "攻撃力",
-                Location = new Point(15, barY + spacing),
+                Location = new Point(15, y0 + sp),
                 Size = new Size(50, 20),
                 Font = statsFont,
                 BackColor = Color.Transparent
             };
-
             attackBar = new WinProgressBar
             {
-                Location = new Point(70, barY + spacing),
-                Size = new Size(200, barHeight),
+                Location = new Point(70, y0 + sp),
+                Size = new Size(200, h),
                 Style = ProgressBarStyle.Continuous
             };
 
             lblDefense = new Label
             {
                 Text = "防御力",
-                Location = new Point(15, barY + spacing * 2),
+                Location = new Point(15, y0 + sp * 2),
                 Size = new Size(50, 20),
                 Font = statsFont,
                 BackColor = Color.Transparent
             };
-
             defenseBar = new WinProgressBar
             {
-                Location = new Point(70, barY + spacing * 2),
-                Size = new Size(200, barHeight),
+                Location = new Point(70, y0 + sp * 2),
+                Size = new Size(200, h),
                 Style = ProgressBarStyle.Continuous
             };
 
@@ -370,27 +397,26 @@ namespace nurturing
                 lblDescription, lblHealth, healthBar,
                 lblAttack, attackBar, lblDefense, defenseBar
             });
-
             this.Controls.Add(statsPanel);
 
             StyleButton(button_submitPick, Color.FromArgb(50, 205, 50));
             StyleButton(button_changeName, Color.FromArgb(30, 144, 255));
         }
 
-        private void StyleButton(WinButton button, Color color)
+        private void StyleButton(WinButton btn, Color color)
         {
-            if (button == null) return;
+            if (btn == null) return;
 
-            var family = (labelFont?.FontFamily) ?? SystemFonts.DefaultFont.FontFamily;
-            button.FlatStyle = FlatStyle.Flat;
-            button.FlatAppearance.BorderSize = 0;
-            button.BackColor = color;
-            button.ForeColor = Color.White;
-            button.Font = new Font(family, 12, FontStyle.Bold);
-            button.Cursor = Cursors.Hand;
+            var fam = (labelFont?.FontFamily) ?? SystemFonts.DefaultFont.FontFamily;
+            btn.FlatStyle = FlatStyle.Flat;
+            btn.FlatAppearance.BorderSize = 0;
+            btn.BackColor = color;
+            btn.ForeColor = Color.White;
+            btn.Font = new Font(fam, 12, FontStyle.Bold);
+            btn.Cursor = Cursors.Hand;
 
-            button.MouseEnter += (s, e) => button.BackColor = ControlPaint.Light(color, 0.2f);
-            button.MouseLeave += (s, e) => button.BackColor = color;
+            btn.MouseEnter += (s, e) => btn.BackColor = ControlPaint.Light(color, 0.2f);
+            btn.MouseLeave += (s, e) => btn.BackColor = color;
         }
 
         private void StatsPanel_Paint(object sender, PaintEventArgs e)
@@ -398,58 +424,53 @@ namespace nurturing
             Graphics g = e.Graphics;
             g.SmoothingMode = SmoothingMode.AntiAlias;
 
-            Rectangle rect = new Rectangle(0, 0, statsPanel.Width - 1, statsPanel.Height - 1);
-            int radius = 15;
+            Rectangle r = new Rectangle(0, 0, statsPanel.Width - 1, statsPanel.Height - 1);
+            int rad = 15;
 
-            using (GraphicsPath path = GetRoundedRectangle(rect, radius))
+            using (GraphicsPath p = GetRoundedRectangle(r, rad))
             {
-                using (PathGradientBrush shadowBrush = new PathGradientBrush(path))
+                using (PathGradientBrush sh = new PathGradientBrush(p))
                 {
-                    shadowBrush.CenterColor = Color.FromArgb(30, 0, 0, 0);
-                    shadowBrush.SurroundColors = new Color[] { Color.Transparent };
+                    sh.CenterColor = Color.FromArgb(30, 0, 0, 0);
+                    sh.SurroundColors = new[] { Color.Transparent };
 
-                    Rectangle shadowRect = new Rectangle(2, 2, rect.Width, rect.Height);
-                    using (GraphicsPath shadowPath = GetRoundedRectangle(shadowRect, radius))
+                    Rectangle sr = new Rectangle(2, 2, r.Width, r.Height);
+                    using (GraphicsPath sp = GetRoundedRectangle(sr, rad))
                     {
-                        g.FillPath(shadowBrush, shadowPath);
+                        g.FillPath(sh, sp);
                     }
                 }
 
-                using (SolidBrush bgBrush = new SolidBrush(Color.FromArgb(250, 255, 255, 255)))
-                {
-                    g.FillPath(bgBrush, path);
-                }
+                using (SolidBrush bg = new SolidBrush(Color.FromArgb(250, 255, 255, 255)))
+                    g.FillPath(bg, p);
 
                 using (Pen pen = new Pen(Color.FromArgb(200, 200, 200), 1))
-                {
-                    g.DrawPath(pen, path);
-                }
+                    g.DrawPath(pen, p);
             }
         }
 
         //==================== 汎用 ====================
-        private GraphicsPath GetRoundedRectangle(Rectangle rect, int radius)
+        private GraphicsPath GetRoundedRectangle(Rectangle rect, int rad)
         {
-            GraphicsPath path = new GraphicsPath();
-            path.AddArc(rect.X, rect.Y, radius, radius, 180, 90);
-            path.AddArc(rect.Right - radius, rect.Y, radius, radius, 270, 90);
-            path.AddArc(rect.Right - radius, rect.Bottom - radius, radius, radius, 0, 90);
-            path.AddArc(rect.X, rect.Bottom - radius, radius, radius, 90, 90);
-            path.CloseFigure();
-            return path;
+            GraphicsPath p = new GraphicsPath();
+            p.AddArc(rect.X, rect.Y, rad, rad, 180, 90);
+            p.AddArc(rect.Right - rad, rect.Y, rad, rad, 270, 90);
+            p.AddArc(rect.Right - rad, rect.Bottom - rad, rad, rad, 0, 90);
+            p.AddArc(rect.X, rect.Bottom - rad, rad, rad, 90, 90);
+            p.CloseFigure();
+            return p;
         }
 
-        private Image MakeTransparentImage(Image source, float opacity)
+        private Image MakeTransparentImage(Image src, float opacity)
         {
-            Bitmap bmp = new Bitmap(source.Width, source.Height);
+            Bitmap bmp = new Bitmap(src.Width, src.Height);
             using (Graphics g = Graphics.FromImage(bmp))
             {
-                ColorMatrix colorMatrix = new ColorMatrix();
-                colorMatrix.Matrix33 = opacity;
-                ImageAttributes attributes = new ImageAttributes();
-                attributes.SetColorMatrix(colorMatrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
-                g.DrawImage(source, new Rectangle(0, 0, bmp.Width, bmp.Height),
-                    0, 0, source.Width, source.Height, GraphicsUnit.Pixel, attributes);
+                ColorMatrix m = new ColorMatrix { Matrix33 = opacity };
+                ImageAttributes ia = new ImageAttributes();
+                ia.SetColorMatrix(m, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
+                g.DrawImage(src, new Rectangle(0, 0, bmp.Width, bmp.Height),
+                    0, 0, src.Width, src.Height, GraphicsUnit.Pixel, ia);
             }
             return bmp;
         }
@@ -461,52 +482,46 @@ namespace nurturing
             {
                 new CharacterInfo
                 {
-                    Name = "赤ピクミン",
-                    Image = Properties.Resources.RedPikumin,
-                    Description = "火に強く、攻撃力が高い勇敢な戦士。\n炎の中でも平気で活動できる。",
-                    Health = 100,
-                    Attack = 80,
-                    Defense = 60,
-                    ThemeColor = Color.FromArgb(220, 20, 60)
+                    Name="赤ピクミン",
+                    Image=Properties.Resources.RedPikumin,
+                    Description="火に強く、攻撃力が高い勇敢な戦士",
+                    Health=100, Attack=80, Defense=60,
+                    ThemeColor=Color.FromArgb(220,20,60)
                 },
                 new CharacterInfo
                 {
-                    Name = "羽ピクミン",
-                    Image = Properties.Resources.WingPikumin,
-                    Description = "空を飛べて素早い。\n障害物を越えて移動できる特殊能力を持つ。",
-                    Health = 80,
-                    Attack = 50,
-                    Defense = 40,
-                    ThemeColor = Color.FromArgb(255, 20, 147)
+                    Name="羽ピクミン",
+                    Image=Properties.Resources.WingPikumin,
+                    Description="空を飛べて素早い",
+                    Health=80, Attack=50, Defense=40,
+                    ThemeColor=Color.FromArgb(255,20,147)
                 },
                 new CharacterInfo
                 {
-                    Name = "岩ピクミン",
-                    Image = Properties.Resources.RockPikumin,
-                    Description = "防御力が高く頑丈。\nガラスや氷を破壊できる特殊能力を持つ。",
-                    Health = 120,
-                    Attack = 70,
-                    Defense = 100,
-                    ThemeColor = Color.FromArgb(105, 105, 105)
+                    Name="岩ピクミン",
+                    Image=Properties.Resources.RockPikumin,
+                    Description="防御力が高く頑丈",
+                    Health=120, Attack=70, Defense=100,
+                    ThemeColor=Color.FromArgb(105,105,105)
                 }
             };
 
             customNames = new string[characters.Count];
 
-            foreach (var character in characters)
+            // 画像が無い場合のプレースホルダー
+            foreach (var c in characters)
             {
-                if (character.Image == null)
+                if (c.Image != null) continue;
+                Bitmap tmp = new Bitmap(250, 349);
+                using (Graphics g = Graphics.FromImage(tmp))
                 {
-                    Bitmap tempImage = new Bitmap(250, 349);
-                    using (Graphics g = Graphics.FromImage(tempImage))
-                    {
-                        g.Clear(Color.LightGray);
-                        g.DrawString(character.Name, new Font("MS UI Gothic", 20), Brushes.Black,
-                            new RectangleF(0, 150, 250, 50),
-                            new StringFormat { Alignment = StringAlignment.Center });
-                    }
-                    character.Image = tempImage;
+                    g.Clear(Color.LightGray);
+                    g.DrawString(c.Name, new Font("MS UI Gothic", 20),
+                        Brushes.Black,
+                        new RectangleF(0, 150, 250, 50),
+                        new StringFormat { Alignment = StringAlignment.Center });
                 }
+                c.Image = tmp;
             }
         }
 
@@ -515,75 +530,46 @@ namespace nurturing
         {
             if (isAnimating) return;
 
-            int centerIndex = currentIndex;
-            int leftIndex = (currentIndex - 1 + characters.Count) % characters.Count;
-            int rightIndex = (currentIndex + 1) % characters.Count;
+            int c = currentIndex;
+            int l = (c - 1 + characters.Count) % characters.Count;
+            int r = (c + 1) % characters.Count;
 
-            pictureBox1.Image = MakeTransparentImage(characters[leftIndex].Image, 0.3f);
-            pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
+            pictureBox1.Image = MakeTransparentImage(characters[l].Image, 0.3f);
+            pictureBox2.Image = characters[c].Image;
+            pictureBox3.Image = MakeTransparentImage(characters[r].Image, 0.3f);
 
-            pictureBox2.Image = characters[centerIndex].Image;
-            pictureBox2.SizeMode = PictureBoxSizeMode.StretchImage;
+            pictureBox1.SizeMode = pictureBox2.SizeMode = pictureBox3.SizeMode = PictureBoxSizeMode.StretchImage;
             pictureBox2.BorderStyle = BorderStyle.FixedSingle;
 
-            pictureBox3.Image = MakeTransparentImage(characters[rightIndex].Image, 0.3f);
-            pictureBox3.SizeMode = PictureBoxSizeMode.StretchImage;
+            label_Chara1.Text = string.IsNullOrEmpty(customNames[l]) ? characters[l].Name : customNames[l];
+            label_Chara2.Text = string.IsNullOrEmpty(customNames[c]) ? characters[c].Name : customNames[c];
+            label_Chara3.Text = string.IsNullOrEmpty(customNames[r]) ? characters[r].Name : customNames[r];
 
-            label_Chara1.Text = !string.IsNullOrEmpty(customNames[leftIndex]) ? customNames[leftIndex] : characters[leftIndex].Name;
             label_Chara1.ForeColor = Color.FromArgb(169, 169, 169);
-
-            label_Chara2.Text = !string.IsNullOrEmpty(customNames[centerIndex]) ? customNames[centerIndex] : characters[centerIndex].Name;
-            label_Chara2.ForeColor = characters[centerIndex].ThemeColor;
-            label_Chara2.Font = new Font((labelFont?.FontFamily) ?? SystemFonts.DefaultFont.FontFamily, 18, FontStyle.Bold);
-
-            label_Chara3.Text = !string.IsNullOrEmpty(customNames[rightIndex]) ? customNames[rightIndex] : characters[rightIndex].Name;
             label_Chara3.ForeColor = Color.FromArgb(169, 169, 169);
+            label_Chara2.ForeColor = characters[c].ThemeColor;
 
-            var selected = characters[centerIndex];
-            lblDescription.Text = selected.Description;
+            var sel = characters[c];
+            lblDescription.Text = sel.Description;
 
-            healthBar.Maximum = 150;
-            healthBar.Value = selected.Health;
-            SetProgressBarColor(healthBar, Color.FromArgb(255, 99, 71));
+            healthBar.Maximum = 150; healthBar.Value = sel.Health;
+            attackBar.Maximum = 100; attackBar.Value = sel.Attack;
+            defenseBar.Maximum = 100; defenseBar.Value = sel.Defense;
 
-            attackBar.Maximum = 100;
-            attackBar.Value = selected.Attack;
-            SetProgressBarColor(attackBar, Color.FromArgb(255, 140, 0));
-
-            defenseBar.Maximum = 100;
-            defenseBar.Value = selected.Defense;
-            SetProgressBarColor(defenseBar, Color.FromArgb(70, 130, 180));
-
-            lblHealth.Text = $"体力 {selected.Health}";
-            lblAttack.Text = $"攻撃力 {selected.Attack}";
-            lblDefense.Text = $"防御力 {selected.Defense}";
-        }
-
-        private void SetProgressBarColor(WinProgressBar bar, Color color)
-        {
-            bar.Style = ProgressBarStyle.Continuous;
-            ModifyProgressBarColor.SetState(bar, 1);
-        }
-
-        public static class ModifyProgressBarColor
-        {
-            [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = false)]
-            static extern IntPtr SendMessage(IntPtr hWnd, uint Msg, IntPtr w, IntPtr l);
-            public static void SetState(WinProgressBar pBar, int state)
-            {
-                SendMessage(pBar.Handle, 1040, (IntPtr)state, IntPtr.Zero);
-            }
+            lblHealth.Text = $"体力 {sel.Health}";
+            lblAttack.Text = $"攻撃力 {sel.Attack}";
+            lblDefense.Text = $"防御力 {sel.Defense}";
         }
 
         //==================== 操作系 ====================
-        private void pictureBox1_Click(object sender, EventArgs e) => MoveCarousel(-1);
+        private void pictureBox1_Click(object sender, EventArgs e) { MoveCarousel(-1); }
         private void pictureBox2_Click(object sender, EventArgs e) { }
-        private void pictureBox3_Click(object sender, EventArgs e) => MoveCarousel(1);
+        private void pictureBox3_Click(object sender, EventArgs e) { MoveCarousel(1); }
 
-        private void MoveCarousel(int direction)
+        private void MoveCarousel(int dir)
         {
             if (isAnimating) return;
-            currentIndex = (currentIndex + direction + characters.Count) % characters.Count;
+            currentIndex = (currentIndex + dir + characters.Count) % characters.Count;
             StartAnimation();
         }
 
@@ -607,16 +593,8 @@ namespace nurturing
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
-            if (keyData == Keys.Left)
-            {
-                MoveCarousel(-1);
-                return true;
-            }
-            else if (keyData == Keys.Right)
-            {
-                MoveCarousel(1);
-                return true;
-            }
+            if (keyData == Keys.Left) { MoveCarousel(-1); return true; }
+            if (keyData == Keys.Right) { MoveCarousel(1); return true; }
             return base.ProcessCmdKey(ref msg, keyData);
         }
 
@@ -629,114 +607,56 @@ namespace nurturing
 
         private void Button_submitPick_Click(object sender, EventArgs e)
         {
-            string finalName = !string.IsNullOrEmpty(customNames[currentIndex])
-                ? customNames[currentIndex]
-                : characters[currentIndex].Name;
+            string finalName = string.IsNullOrEmpty(customNames[currentIndex]) ?
+                               characters[currentIndex].Name : customNames[currentIndex];
 
-            var selected = characters[currentIndex];
-            string message =
+            var sel = characters[currentIndex];
+            string msg =
                 "以下の内容で確定しますか？\n\n" +
                 $"名前：{finalName}\n" +
-                $"種類：{selected.Name}\n" +
-                $"体力：{selected.Health}\n" +
-                $"攻撃力：{selected.Attack}\n" +
-                $"防御力：{selected.Defense}";
+                $"種類：{sel.Name}\n" +
+                $"体力：{sel.Health}\n" +
+                $"攻撃力：{sel.Attack}\n" +
+                $"防御力：{sel.Defense}";
 
-            DialogResult result = MessageBox.Show(message, "確認",
-                MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (MessageBox.Show(msg, "確認", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
+                return;
 
-            if (result == DialogResult.Yes)
+            StopAndDisposeBgm();
+
+            var nurture = new FormNurture(
+                finalName, sel.Name, sel.Health, sel.Attack, sel.Defense, sel.Image);
+            try
             {
-                FormNurture nurtureForm = new FormNurture(
-                    finalName,
-                    selected.Name,
-                    selected.Health,
-                    selected.Attack,
-                    selected.Defense,
-                    selected.Image
-                );
-
                 this.Hide();
-                nurtureForm.ShowDialog();
+                nurture.ShowDialog();
+            }
+            finally
+            {
+                nurture.Dispose();
                 this.Show();
             }
+
+            bgmInitialized = false;
+            Form_Pick_Load(this, EventArgs.Empty); // BGM 再開
         }
 
         private void Button_changeName_Click(object sender, EventArgs e)
         {
-            FormNameChange nameChangeForm = new FormNameChange();
-            nameChangeForm.CurrentName = !string.IsNullOrEmpty(customNames[currentIndex])
-                ? customNames[currentIndex]
-                : characters[currentIndex].Name;
-
-            if (nameChangeForm.ShowDialog(this) == DialogResult.OK)
+            var dlg = new FormNameChange
             {
-                customNames[currentIndex] = nameChangeForm.NewName;
-                UpdateDisplay();
-            }
-        }
-
-        private void DisposeCustomResources()
-        {
-            titleFont?.Dispose();
-            labelFont?.Dispose();
-            statsFont?.Dispose();
-            privateFonts?.Dispose();
-        }
-    }
-
-    /// <summary>
-    /// WaveStream を無限ループさせる簡易ラッパー
-    /// </summary>
-    public class LoopStream : WaveStream
-    {
-        private readonly WaveStream sourceStream;
-
-        public LoopStream(WaveStream source)
-        {
-            this.sourceStream = source;
-            this.EnableLooping = true;
-        }
-
-        public bool EnableLooping { get; set; }
-
-        public override WaveFormat WaveFormat => sourceStream.WaveFormat;
-
-        public override long Length => sourceStream.Length;
-
-        public override long Position
-        {
-            get => sourceStream.Position;
-            set => sourceStream.Position = value;
-        }
-
-        public override int Read(byte[] buffer, int offset, int count)
-        {
-            int totalBytesRead = 0;
-
-            while (totalBytesRead < count)
+                CurrentName = string.IsNullOrEmpty(customNames[currentIndex]) ?
+                              characters[currentIndex].Name : customNames[currentIndex]
+            };
+            try
             {
-                int bytesRead = sourceStream.Read(buffer, offset + totalBytesRead, count - totalBytesRead);
-                if (bytesRead == 0)
+                if (dlg.ShowDialog(this) == DialogResult.OK)
                 {
-                    if (sourceStream.Position == 0 || !EnableLooping)
-                    {
-                        break;
-                    }
-                    sourceStream.Position = 0;
+                    customNames[currentIndex] = dlg.NewName;
+                    UpdateDisplay();
                 }
-                totalBytesRead += bytesRead;
             }
-            return totalBytesRead;
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                sourceStream.Dispose();
-            }
-            base.Dispose(disposing);
+            finally { dlg.Dispose(); }
         }
     }
 }
