@@ -8,10 +8,12 @@ namespace nurturing
     /// </summary>
     public class LoopStream : WaveStream
     {
+        // 再生が終わると自動で先頭に戻るクラス
         private readonly WaveStream _source;
 
         public LoopStream(WaveStream source)
         {
+            // 再生対象の WaveStream を受け取る
             _source = source ?? throw new ArgumentNullException(nameof(source));
             EnableLooping = true;
         }
@@ -30,6 +32,7 @@ namespace nurturing
 
         public override int Read(byte[] buffer, int offset, int count)
         {
+            // 読み切ったら自動で先頭に戻りループ再生
             int totalBytesRead = 0;
 
             while (totalBytesRead < count)

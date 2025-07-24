@@ -21,6 +21,8 @@ namespace nurturing
 {
     public partial class Form_Pick : Form
     {
+        // キャラ選択画面
+        // 複雑な処理は少ない
         //==================== キャラクター情報 ====================
         private class CharacterInfo
         {
@@ -76,6 +78,7 @@ namespace nurturing
         //==================== コンストラクタ ====================
         public Form_Pick()
         {
+            // フォームの初期化と外観設定をまとめて行う
             InitializeComponent();
             this.AutoScaleMode = AutoScaleMode.None;
 
@@ -114,6 +117,7 @@ namespace nurturing
         //==================== CSV からカスタム名をロード ====================
         private void LoadSavedNamesFromCsv()
         {
+            // 保存済みの名前を読み込む処理
             try
             {
                 string saveDir = Path.Combine(Application.StartupPath, "SaveData");
@@ -199,9 +203,12 @@ namespace nurturing
         }
 
         //==================== フォント読み込み ====================
+
         [DllImport("gdi32.dll")]
         private static extern IntPtr AddFontMemResourceEx(IntPtr pbFont, uint cbFont,
                                                           IntPtr pdv, [In] ref uint pcFonts);
+
+        // メモリからカスタムフォントを読み込む処理
 
         private void LoadCustomFonts()
         {
@@ -241,6 +248,8 @@ namespace nurturing
 
         private void ApplyFontToAllControls(Control root, FontFamily fam, params Control[] excludes)
         {
+            // フォーム内のコントロールにフォントを一括設定
+            // 除外リストのコントロールは対象外
             foreach (Control c in root.Controls)
             {
                 bool skip = false;
@@ -257,6 +266,8 @@ namespace nurturing
 
         private void PlaySoundEffect(string fileName)
         {
+            // 渡された音声を再生
+            // 再生後にリソースを解放
             try
             {
                 string path = Path.Combine(Application.StartupPath, "Sounds", fileName);
@@ -472,6 +483,8 @@ namespace nurturing
 
         private void StatsPanel_Paint(object sender, PaintEventArgs e)
         {
+            // ステータス枠を角丸と影付きで描画
+            // 見た目を整える
             Graphics g = e.Graphics;
             g.SmoothingMode = SmoothingMode.AntiAlias;
 
@@ -503,6 +516,7 @@ namespace nurturing
         //==================== 汎用 ====================
         private GraphicsPath GetRoundedRectangle(Rectangle rect, int rad)
         {
+            // 角丸の四角を作るためのヘルパーメソッド。
             GraphicsPath p = new GraphicsPath();
             p.AddArc(rect.X, rect.Y, rad, rad, 180, 90);
             p.AddArc(rect.Right - rad, rect.Y, rad, rad, 270, 90);
@@ -514,6 +528,7 @@ namespace nurturing
 
         private Image MakeTransparentImage(Image src, float opacity)
         {
+            // 画像に透明度をかけたコピーを作成する
             Bitmap bmp = new Bitmap(src.Width, src.Height);
             using (Graphics g = Graphics.FromImage(bmp))
             {
@@ -529,6 +544,7 @@ namespace nurturing
         //==================== キャラ初期化 ====================
         private void InitializeCharacters()
         {
+            // ここで選べるキャラのリストを作成。
             characters = new List<CharacterInfo>
             {
                 new CharacterInfo
@@ -559,7 +575,7 @@ namespace nurturing
 
             customNames = new string[characters.Count];
 
-            // 画像が無い場合のプレースホルダー
+            // 画像が無いキャラはグレーの仮画像で代用する
             foreach (var c in characters)
             {
                 if (c.Image != null) continue;
@@ -579,6 +595,8 @@ namespace nurturing
         //==================== 表示更新 ====================
         private void UpdateDisplay()
         {
+            // 現在と左右のキャラを表示に反映
+            // アニメーション中は実行しない
             if (isAnimating) return;
 
             int c = currentIndex;
@@ -619,6 +637,7 @@ namespace nurturing
 
         private void MoveCarousel(int dir)
         {
+            // キャラを左右にスライドさせる
             if (isAnimating) return;
             currentIndex = (currentIndex + dir + characters.Count) % characters.Count;
             StartAnimation();
@@ -626,6 +645,7 @@ namespace nurturing
 
         private void StartAnimation()
         {
+            // アニメーション開始の処理
             isAnimating = true;
             animationStep = 0;
             animationTimer.Start();
@@ -633,6 +653,7 @@ namespace nurturing
 
         private void AnimationTimer_Tick(object sender, EventArgs e)
         {
+            // 規定回数でアニメーション終了
             animationStep++;
             if (animationStep >= 10)
             {
@@ -644,6 +665,7 @@ namespace nurturing
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
+            // 左右キーでキャラを切り替える
             if (keyData == Keys.Left) { MoveCarousel(-1); return true; }
             if (keyData == Keys.Right) { MoveCarousel(1); return true; }
             return base.ProcessCmdKey(ref msg, keyData);
@@ -652,12 +674,14 @@ namespace nurturing
         protected override void OnMouseWheel(MouseEventArgs e)
         {
             base.OnMouseWheel(e);
+            // マウスホイールでキャラを切り替える
             if (e.Delta > 0) MoveCarousel(-1);
             else if (e.Delta < 0) MoveCarousel(1);
         }
 
         private void Button_submitPick_Click(object sender, EventArgs e)
         {
+            // 決定ボタン処理。BGMを停止して育成画面へ遷移
             PlaySoundEffect("Decide.mp3"); // ← ここで再生
 
             // 以下は既存の処理
@@ -698,6 +722,7 @@ namespace nurturing
 
         private void Button_changeName_Click(object sender, EventArgs e)
         {
+            // 名前変更ダイアログを表示
             var dlg = new FormNameChange
             {
                 CurrentName = string.IsNullOrEmpty(customNames[currentIndex]) ?
@@ -716,6 +741,7 @@ namespace nurturing
 
         private void button_submitPick_Click_1(object sender, EventArgs e)
         {
+            // デザイナー生成イベント用。効果音だけ再生
             PlaySoundEffect("Decide.mp3");
         }
 

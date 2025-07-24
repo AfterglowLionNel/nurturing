@@ -14,9 +14,12 @@ namespace nurturing
 {
     public partial class FormNurture : Form
     {
+        // 育成メイン画面
+        // 機能が多いのでコメントも多め
         //================ キャラクターデータクラス ================
         public class CharacterData
         {
+            // 育成キャラの状態を保持するクラス
             public string Name { get; set; }
             public string OriginalName { get; set; }
             public int Level { get; set; }
@@ -81,6 +84,7 @@ namespace nurturing
         //================ コンストラクタ ================
         public FormNurture(string characterName, string originalName, int health, int attack, int defense, Image characterImage)
         {
+            // 渡されたキャラで初期設定する
             InitializeComponent();
 
             SetStyle(ControlStyles.AllPaintingInWmPaint |
@@ -179,6 +183,7 @@ namespace nurturing
         //================ 草生成/描画 =================
         private void GenerateGrassPositions()
         {
+            // 背景に生やす草の位置をランダムで決める。
             grassPositions.Clear();
 
             for (int i = 0; i < 100; i++)
@@ -197,6 +202,7 @@ namespace nurturing
 
         private void CreateBackgroundBuffer()
         {
+            // 草は毎回描くと重いため一度だけ描き溜める
             backgroundBuffer?.Dispose();
 
             backgroundBuffer = new Bitmap(panel_gameArea.Width, panel_gameArea.Height);
@@ -217,6 +223,7 @@ namespace nurturing
 
         private void DrawGrassTexture(Graphics g)
         {
+            // 草を一本ずつカーブで描画する
             g.SmoothingMode = SmoothingMode.AntiAlias;
 
             foreach (var grass in grassPositions)
@@ -258,6 +265,7 @@ namespace nurturing
 
         private void DrawFloatingTexts(Graphics g)
         {
+            // エキスを与えたときのポップアップ文字を描画する
             using (Font font = new Font("Arial", 16, FontStyle.Bold))
             {
                 foreach (var text in floatingTexts)
@@ -284,6 +292,7 @@ namespace nurturing
 
         private void PlaySoundEffect(string fileName)
         {
+            // 効果音再生の共通処理。
             try
             {
                 string path = Path.Combine(Application.StartupPath, "Sounds", fileName);
@@ -323,6 +332,7 @@ namespace nurturing
         //================ UI =================
         private void SetupUI()
         {
+            // UIを配置してイベントを登録
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.StartPosition = FormStartPosition.CenterParent;
@@ -361,6 +371,7 @@ namespace nurturing
 
         private void SetupProgressBars()
         {
+            // ステータス用バーの位置を調整。
             int margin = 6;
             int barWidth = 180;
 
@@ -413,6 +424,7 @@ namespace nurturing
 
         private void DrawExtract()
         {
+            // エキスアイコンを自前で描く。
             Bitmap extractImage = new Bitmap(50, 50);
             using (Graphics g = Graphics.FromImage(extractImage))
             {
@@ -509,6 +521,7 @@ namespace nurturing
         //================ ドラッグ＆ドロップ =================
         private void PictureBox_extract_MouseDown(object sender, MouseEventArgs e)
         {
+            // エキスのドラッグを開始。
             if (e.Button == MouseButtons.Left && currentCharacter.ExtractCount > 0)
             {
                 isDragging = true;
@@ -533,6 +546,7 @@ namespace nurturing
 
         private void PictureBox_extract_MouseMove(object sender, MouseEventArgs e)
         {
+            // ドラッグ中はマウスに合わせてアイコンを移動。
             if (isDragging && draggingExtract != null)
             {
                 Point currentScreenPoint = Control.MousePosition;
@@ -542,6 +556,7 @@ namespace nurturing
 
         private void PictureBox_extract_MouseUp(object sender, MouseEventArgs e)
         {
+            // ドロップ終了、キャラに重なったら餌やり成功。
             if (isDragging && draggingExtract != null)
             {
                 Rectangle charRect = new Rectangle(
@@ -581,6 +596,7 @@ namespace nurturing
 
         private void FeedCharacter()
         {
+            // エキスを与えて経験値アップ。
             if (currentCharacter.ExtractCount <= 0) return;
 
             currentCharacter.ExtractCount--;
@@ -608,6 +624,7 @@ namespace nurturing
 
         private void CheckLevelUp()
         {
+            // 経験値がたまったらレベルアップ処理。
             bool leveled = false;
             while (currentCharacter.Experience >= currentCharacter.MaxExperience)
             {
@@ -647,6 +664,7 @@ namespace nurturing
 
         private void PlayFeedEffect()
         {
+            // 餌を与えたときのぷるぷる演出
             Timer effectTimer = new Timer { Interval = 50 };
             int count = 0;
 
@@ -686,6 +704,7 @@ namespace nurturing
 
         private void AnimationTimer_Tick(object sender, EventArgs e)
         {
+            // 浮き文字の寿命管理や再描画要求を行う。
             bool needsRedraw = false;
 
             for (int i = floatingTexts.Count - 1; i >= 0; i--)
@@ -710,12 +729,14 @@ namespace nurturing
         //================ 保存/読み込み =================
         private void SaveAll()
         {
+            // すべて保存し設定も更新
             SaveCharacterData();
             SettingsManager.ExtractCount = currentCharacter.ExtractCount;
         }
 
         private void SaveCharacterData()
         {
+            // キャラのステータスをCSVで保存。
             try
             {
                 string saveDirectory = Path.Combine(Application.StartupPath, "SaveData");
@@ -748,6 +769,7 @@ namespace nurturing
 
         private void LoadCharacterData()
         {
+            // 保存済みCSVがあれば読み込む。
             try
             {
                 string saveDirectory = Path.Combine(Application.StartupPath, "SaveData");
@@ -792,6 +814,7 @@ namespace nurturing
         //================ 画面遷移 =================
         private void Button_back_Click(object sender, EventArgs e)
         {
+            // 選択画面に戻るボタン
             SaveAll();
             Close();
         }
@@ -799,16 +822,19 @@ namespace nurturing
         //================ リサイズ =================
         private void Panel_gameArea_Resize(object sender, EventArgs e)
         {
+            // リサイズ時に草の位置を作り直す
             GenerateGrassPositions();
         }
 
         private void pictureBox_extract_Click(object sender, EventArgs e)
         {
+            // クリック時に効果音だけ再生
             PlaySoundEffect("Ekisu2.mp3");
         }
 
         private void button_back_Click_1(object sender, EventArgs e)
         {
+            // 戻るボタン用の効果音を再生
             PlaySoundEffect("Back.mp3");
 
         }

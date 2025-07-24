@@ -8,6 +8,7 @@ namespace nurturing
 {
     internal static class Program
     {
+        // アプリのエントリーポイント
         /// <summary>
         /// アプリケーションのメイン エントリ ポイントです。
         /// </summary>

@@ -6,6 +6,7 @@ namespace nurturing
 {
     public class VolumeDialog : Form
     {
+        // 音量を調整するダイアログ
         private TrackBar trackBar;
         private Label lblValue;
         private Button btnOk;
@@ -17,6 +18,7 @@ namespace nurturing
 
         public VolumeDialog(int initialPercent = 30)
         {
+            // 初期値を基にダイアログを作成
             Text = "音量調整";
             FormBorderStyle = FormBorderStyle.FixedDialog;
             MaximizeBox = false;
@@ -71,6 +73,7 @@ namespace nurturing
 
             btnOk.Click += (s, e) =>
             {
+                // OKで設定を保存
                 SettingsManager.SoundVolume = SelectedVolume;
                 Console.WriteLine("[DEBUG] Saved volume: " + SelectedVolume);
             };
@@ -79,6 +82,7 @@ namespace nurturing
 
         private void TrackBar_Scroll(object sender, EventArgs e)
         {
+            // スライダー移動時に値を表示して通知
             lblValue.Text = $"{trackBar.Value}%";
             VolumeChanged?.Invoke(SelectedVolume);
         }
