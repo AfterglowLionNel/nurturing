@@ -14,6 +14,7 @@ namespace nurturing
     /// </summary>
     public static class SettingsManager
     {
+        // 設定を保存するクラス
         private static readonly string SaveDir =
             Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "SaveData");
         private static readonly string SettingsFile =
@@ -83,6 +84,7 @@ namespace nurturing
 
         private static float Clamp(float value, float min, float max)
         {
+            // 値を範囲内に丸める小さな関数
             return (value < min) ? min : (value > max) ? max : value;
         }
 
@@ -94,6 +96,7 @@ namespace nurturing
         {
             get
             {
+                // CSVから取得した文字列を float に変換
                 if (_settings.TryGetValue("SoundVolume", out var v))
                 {
                     Debug.WriteLine($"[DEBUG] SoundVolume raw: '{v}'");
@@ -107,6 +110,7 @@ namespace nurturing
             }
             set
             {
+                // 0～1に丸めてから保存する
                 var clamped = Clamp(value, 0f, 1f);
                 _settings["SoundVolume"] = clamped.ToString("0.00", CultureInfo.InvariantCulture);
                 SaveSettings();
