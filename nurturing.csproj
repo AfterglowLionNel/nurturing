@@ -196,5 +196,14 @@
   <ItemGroup>
     <None Include="Resources\Lifelog-_Main-Menu_-Pikmin-Bloom-OST.wav" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\WingPikmin.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\RockPikmin.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\RedPikmin.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

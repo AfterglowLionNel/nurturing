@@ -172,9 +172,9 @@ namespace nurturing.Properties {
         /// <summary>
         ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
         /// </summary>
-        internal static System.Drawing.Bitmap RedPikumin {
+        internal static System.Drawing.Bitmap RedPikmin {
             get {
-                object obj = ResourceManager.GetObject("RedPikumin", resourceCulture);
+                object obj = ResourceManager.GetObject("RedPikmin", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -182,9 +182,9 @@ namespace nurturing.Properties {
         /// <summary>
         ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
         /// </summary>
-        internal static System.Drawing.Bitmap RockPikumin {
+        internal static System.Drawing.Bitmap RockPikmin {
             get {
-                object obj = ResourceManager.GetObject("RockPikumin", resourceCulture);
+                object obj = ResourceManager.GetObject("RockPikmin", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -246,9 +246,9 @@ namespace nurturing.Properties {
         /// <summary>
         ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
         /// </summary>
-        internal static System.Drawing.Bitmap WingPikumin {
+        internal static System.Drawing.Bitmap WingPikmin {
             get {
-                object obj = ResourceManager.GetObject("WingPikumin", resourceCulture);
+                object obj = ResourceManager.GetObject("WingPikmin", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

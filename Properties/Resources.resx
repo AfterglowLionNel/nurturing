@@ -118,15 +118,6 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="RockPikumin" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\RockPikumin.jpeg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="RedPikumin" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\RedPikumin.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="WingPikumin" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\WingPikumin.jpeg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="Badges___Pikmin_Bloom_OST" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Badges - Pikmin Bloom OST.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
@@ -180,5 +171,14 @@
   </data>
   <data name="pikminneue" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\pikminneue.otf;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="RedPikmin" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\RedPikmin.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="RockPikmin" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\RockPikmin.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="WingPikmin" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\WingPikmin.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

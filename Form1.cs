@@ -401,6 +401,13 @@ namespace nurturing
 
             StyleButton(button_submitPick, Color.FromArgb(50, 205, 50));
             StyleButton(button_changeName, Color.FromArgb(30, 144, 255));
+
+            pictureBox1.BackColor = Color.Transparent;
+            pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
+            pictureBox2.BackColor = Color.Transparent;
+            pictureBox2.SizeMode = PictureBoxSizeMode.StretchImage;
+            pictureBox3.BackColor = Color.Transparent;
+            pictureBox3.SizeMode = PictureBoxSizeMode.StretchImage;
         }
 
         private void StyleButton(WinButton btn, Color color)
@@ -483,7 +490,7 @@ namespace nurturing
                 new CharacterInfo
                 {
                     Name="赤ピクミン",
-                    Image=Properties.Resources.RedPikumin,
+                    Image=Properties.Resources.RedPikmin,
                     Description="火に強く、攻撃力が高い勇敢な戦士",
                     Health=100, Attack=80, Defense=60,
                     ThemeColor=Color.FromArgb(220,20,60)
@@ -491,7 +498,7 @@ namespace nurturing
                 new CharacterInfo
                 {
                     Name="羽ピクミン",
-                    Image=Properties.Resources.WingPikumin,
+                    Image=Properties.Resources.WingPikmin,
                     Description="空を飛べて素早い",
                     Health=80, Attack=50, Defense=40,
                     ThemeColor=Color.FromArgb(255,20,147)
@@ -499,7 +506,7 @@ namespace nurturing
                 new CharacterInfo
                 {
                     Name="岩ピクミン",
-                    Image=Properties.Resources.RockPikumin,
+                    Image=Properties.Resources.RockPikmin,
                     Description="防御力が高く頑丈",
                     Health=120, Attack=70, Defense=100,
                     ThemeColor=Color.FromArgb(105,105,105)

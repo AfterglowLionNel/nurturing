@@ -348,7 +348,7 @@ namespace nurturing
             {
                 progressBar_exp2.Left = label_level.Left;
                 progressBar_exp2.Top = label_level.Bottom + margin;
-                progressBar_exp2.Width = barWidth;
+                progressBar_exp2.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
                 progressBar_exp2.Style = ProgressBarStyle.Continuous;
             }
         }
