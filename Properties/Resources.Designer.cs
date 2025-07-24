@@ -151,6 +151,16 @@ namespace nurturing.Properties {
         }
         
         /// <summary>
+        ///   型 System.Byte[] のローカライズされたリソースを検索します。
+        /// </summary>
+        internal static byte[] pikminneue {
+            get {
+                object obj = ResourceManager.GetObject("pikminneue", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
         ///   System.IO.MemoryStream に類似した型 System.IO.UnmanagedMemoryStream のローカライズされたリソースを検索します。
         /// </summary>
         internal static System.IO.UnmanagedMemoryStream Planting_Flowers___Pikmin_Bloom_OST {
